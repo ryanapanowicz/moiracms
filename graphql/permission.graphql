@@ -1,0 +1,120 @@
+
+extend type Query @guard(with: ["api"]) {
+    roles(order_by: [OrderByClause!] @orderBy): [Role] @paginate @hasAccess(permission: "view roles")
+    role(id: ID @eq): Role @guard(with: ["api"]) @find @hasAccess(permission: "view roles")
+    permissions(order_by: [OrderByClause!] @orderBy): [Permission] @paginate @hasAccess(permission: "view permissions")
+    permission(id: ID @eq): Permission @guard(with: ["api"]) @find @hasAccess(permission: "view permissions")
+}
+
+extend type Mutation @guard(with: ["api"]) {
+    "Roles mutations"
+    createRole(input: CreateRoleInput @spread): CreateRolePayload @hasAccess(permission: "create roles")
+    deleteRole(id: ID!): DeleteRolePayload @hasAccess(permission: "delete roles")
+    assignRole(input: AssignRoleInput @spread): AssignRolePayload @hasAccess(permission: "assign roles")
+    revokePermissionToRole(input: RevokePermissionToRoleInput @spread): RevokeRolePayload @hasAccess(permission: "edit roles")
+    removeRole(input: RemoveRoleInput @spread): RemoveRolePayload @hasAccess(permission: "revoke roles")
+
+    "Permission mutations"
+    createPermission(input: CreatePermissionInput! @spread): CreatePermissionPayload @hasAccess(permission: "create permissions")
+    deletePermission(id: ID!): DeletePermissionPayload @hasAccess(permission: "delete permissions")
+    assignPermissionToUser(input: AssignPermissionToUserInput! @spread): AssignPermissionToUserPayload @hasAccess(permission: "assign permissions")
+    assignPermissionToRole(input: AssignPermissionToRoleInput! @spread): AssignPermissionToRolePayload @hasAccess(permission: "edit permissions")
+    revokePermissionToUser(input: RevokePermissionToUserInput! @spread): RevokePermissionToUserPayload @hasAccess(permission: "revoke permissions")
+}
+
+type Permission {
+    id: ID
+    name: String
+    guard_name: String
+    created_at: DateTime,
+    updated_at: DateTime,
+    roles(order_by: [OrderByClause!] @orderBy): [Role] @hasMany @hasAccess(permission: "view roles")
+}
+
+type Role {
+    id: ID
+    name: String
+    guard_name: String
+    created_at: DateTime,
+    updated_at: DateTime,
+    permissions(order_by: [OrderByClause!] @orderBy): [Permission] @hasMany @hasAccess(permission: "view permissions")
+    users(order_by: [OrderByClause!] @orderBy): [User] @hasMany @hasAccess(permission: "view users")
+}
+
+type CreateRolePayload {
+    role: Role
+}
+
+type DeleteRolePayload {
+    role: Role
+}
+
+type AssignRolePayload {
+    user: User
+}
+
+type RevokeRolePayload {
+    role: Role
+}
+
+type RemoveRolePayload {
+    role: Role
+}
+
+type CreatePermissionPayload {
+    permission: Permission
+}
+
+type DeletePermissionPayload {
+    permission: Permission
+}
+
+type AssignPermissionToUserPayload {
+    user: User
+}
+
+type AssignPermissionToRolePayload {
+    role: Role
+}
+
+type RevokePermissionToUserPayload {
+    user: User
+}
+
+input CreateRoleInput {
+    name: String! @rules(apply: ["string", "unique:roles,name"])
+}
+
+input CreatePermissionInput {
+    name: String! @rules(apply: ["string", "unique:permissions,name"])
+}
+
+input AssignPermissionToUserInput {
+    user_id: ID!
+    permission: [String!]! @rules(apply: ["required", "string"])
+}
+
+input AssignPermissionToRoleInput {
+    role: String! @rules(apply: ["string"])
+    permission: [String!]! @rules(apply: ["string"]) @rulesForArray(apply: ["distinct"])
+}
+
+input RevokePermissionToUserInput {
+    user_id: ID!
+    permission: [String!]! @rules(apply: ["string"]) @rulesForArray(apply: ["distinct"])
+}
+
+input RevokePermissionToRoleInput {
+    role: String! @rules(apply: ["string"])
+    permission: [String!]! @rules(apply: ["string"]) @rulesForArray(apply: ["distinct"])
+}
+
+input AssignRoleInput {
+    user_id: ID!
+    role: String @rules(apply: ["string"])
+}
+
+input RemoveRoleInput {
+    user_id: ID!
+    role: String! @rules(apply: ["string"])
+}

@@ -1,0 +1,69 @@
+"Can be used as an argument to upload files using https://github.com/jaydenseric/graphql-multipart-request-spec"
+scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+
+extend type Query {
+    assets(order_by: [OrderByClause!] @orderBy): [Media] @paginate
+    asset(id: ID @eq): Media @find
+}
+
+extend type Mutation @guard(with: ["api"]) {
+    deleteAsset(id: ID!): DeleteAssetPayload @hasAccess(permission: "delete assets")
+    upload(input: AssetUploadInput @spread): [Media]! @hasAccess(permission: "upload assets")
+    updateAssetInfo(id: ID!, input: AssetInfoInput @spread): UpdateAssetPayload @hasAccess(permission: "edit assets")
+}
+
+type Media {
+    id: ID!
+    name: String!
+    file_name: String!
+    url: String!
+    preview: String!
+    responsive_images: [ResposiveImage]
+    type: String!
+    extension: String
+    mime_type: String!
+    size: Float!
+    alternative_text: String
+    caption: String
+    created_at: DateTime!
+    updated_at: DateTime!
+    related: User @morphTo(relation: "model") @hasAccess(permission: "view users", owner: true)
+}
+
+type ResposiveImage {
+    urls: [String]
+    base64svg: String
+}
+
+type DeleteAssetPayload {
+    asset: Media
+}
+
+type UpdateAssetPayload {
+    asset: Media
+}
+
+input AssetUploadInput {
+    ref_id: ID!
+    ref: String
+    info: AssetInfoInput
+    responsive: Boolean
+    files: [Upload]! @rules(
+        apply: ["image", "max:8192"],
+        messages: [
+            {
+                rule: "mimes",
+                message: "Upload only allows these image types jpg, jpeg, png, bmp, gif, svg, or webp."
+            },
+            {
+                rule: "max",
+                message: "Max upload size is 8MB."
+            }
+        ])
+}
+
+input AssetInfoInput {
+    name: String
+    alternative_text: String
+    caption: String
+}

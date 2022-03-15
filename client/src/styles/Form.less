@@ -1,0 +1,44 @@
+.asset-input {
+    position: relative;
+    display: block;
+    margin-top: 20px;
+
+    .ant-list-empty-text {
+        padding: 0;
+    }
+
+    .ant-list-item {
+        position: relative;
+
+        &:hover {
+            .asset-input-remove {
+                right: -10px;
+                top: -10px;
+                width: @btn-circle-size;
+                height: @btn-circle-size;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.asset-input-remove {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    min-width: 0;
+    height: 0;
+    right: 4px;
+    top: 4px;
+    transition: all @animation-duration-base @ease-in-out-quint;
+}
+
+.profile-image-link {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+
+    .ant-image-mask {
+        border-radius: @border-radius-base;
+    }
+}

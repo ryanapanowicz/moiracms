@@ -1,0 +1,90 @@
+
+.admin-layout {
+    margin-left: @main-sidebar-width;
+}
+
+.ant-layout-has-sider.page-layout {
+    position: relative;
+    margin-left: @page-sidebar-width;
+}
+
+.page-title {
+    display: flex;
+    flex: auto;
+    margin: 0;
+    font-size: 16px;
+    line-height: 21px;
+    font-weight: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    align-items: center;
+
+    .title {
+        font-size: 16px;
+        line-height: 21px;
+        font-weight: normal;
+        vertical-align: middle;
+        margin-right: 20px;
+        margin-bottom: 0;
+    }
+}
+
+.page-tools {
+    white-space: nowrap;
+
+    .ant-btn {
+        margin: 0 0 0 15px;
+    }
+}
+
+.page-sider {
+    border-right: 1px solid @page-border-color;
+}
+
+.page-sider-title {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    padding: 0 23px;
+
+    h1 {
+        font-size: 24px;
+        line-height: 32px;
+        margin-bottom: 0;
+    }
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid @page-border-color;
+}
+
+.page-content {
+    position: relative;
+    margin: 0;
+    min-width: 400px;
+    padding: @page-padding;
+
+    .table table {
+        border-top: 1px solid @page-border-color;
+        border-left: 1px solid @page-border-color;
+        border-right: 1px solid @page-border-color;
+    }
+}
+
+.item-list {
+    .ant-list-item {
+        &:hover {
+            background-color: @background-color-light;
+        }
+    }
+}
+
+.error-page {
+    .ant-layout-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

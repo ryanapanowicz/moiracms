@@ -1,0 +1,160 @@
+
+extend type Query {
+    users(order_by: [OrderByClause!] @orderBy): [User!] @paginate @hasAccess(permission: "view users")
+    user(id: ID @eq): User @find @hasAccess(permission: "view users", owner: true)
+    me: AuthUser @auth @guard
+}
+
+extend type Mutation {
+    "Authentication mutations"
+    login(input: LoginInput @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
+    refreshToken(input: RefreshTokenInput @spread): RefreshTokenPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\RefreshToken@resolve")
+    logout: LogoutResponse!
+    forgotPassword(input: ForgotPasswordInput! @spread): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
+    resetPassword(input: NewPasswordWithCodeInput @spread): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
+    "Uncomment to enable Registration"
+    #register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Register@resolve")
+    #socialLogin(input: SocialLoginInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\SocialLogin@resolve")
+    verifyEmail(input: VerifyEmailInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\VerifyEmail@resolve")
+    updatePassword(input: UpdatePassword! @spread): UpdatePasswordResponse! @guard(with: ["api"]) @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\UpdatePassword@resolve")
+
+    "User mutations"
+    createUser(input: CreateUserInput @spread): CreateUserPayload @hasAccess(permission: "create users")
+    updateUser(id: ID! @eq, input: UpdateUserInput @spread): UpdateUserPayload @hasAccess(permission: "edit users", owner: true, model: "User")
+    deleteUser(id: ID!): DeleteUserPayload @hasAccess(permission: "delete users")
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    created_at: DateTime! @hasAccess(permission: "view users")
+    updated_at: DateTime! @hasAccess(permission: "view users")
+    email_verified_at: DateTime @hasAccess(permission: "view users")
+    avatar: String
+    roles(order_by: [OrderByClause!] @orderBy): [Role!] @hasMany @hasAccess(permission: "view roles")
+}
+
+type AuthUser {
+    id: ID!
+    name: String!
+    email: String!
+    avatar: String
+    roles(order_by: [OrderByClause!] @orderBy): [AuthRole!] @hasMany
+}
+
+type AuthRole {
+    id: ID
+    name: String
+    permissions(order_by: [OrderByClause!] @orderBy): [Permission] @hasMany
+}
+
+type CreateUserPayload {
+    user: User
+}
+
+type UpdateUserPayload {
+    user: User
+}
+
+type DeleteUserPayload {
+    user: User
+}
+
+type AuthPayload {
+    access_token: String!
+    refresh_token: String!
+    expires_in: Int!
+    token_type: String!
+}
+
+type RefreshTokenPayload {
+    access_token: String!
+    refresh_token: String!
+    expires_in: Int!
+    token_type: String!
+}
+
+type LogoutResponse {
+    status: String!
+    message: String
+}
+
+type ForgotPasswordResponse {
+    status: String!
+    message: String
+}
+
+type RegisterResponse {
+    tokens: AuthPayload
+    status: RegisterStatuses!
+}
+
+type UpdatePasswordResponse {
+    status: String!
+    message: String
+}
+
+enum RegisterStatuses {
+    MUST_VERIFY_EMAIL
+    SUCCESS
+}
+
+input LoginInput {
+    username: String! @rules(apply: ["email"])
+    password: String!
+}
+
+input RefreshTokenInput {
+    refresh_token: String
+}
+
+input ForgotPasswordInput {
+    email: String! @rules(apply: ["email"])
+}
+
+input NewPasswordWithCodeInput {
+    email: String! @rules(apply: ["email"])
+    token: String! @rules(apply: ["string"])
+    password: String! @rules(apply: ["confirmed", "min:8"])
+    password_confirmation: String!
+}
+
+input RegisterInput {
+    name: String! @rules(apply: ["string"])
+    email: String! @rules(apply: ["email", "unique:users,email"])
+    password: String! @rules(apply: ["confirmed", "min:8"])
+    password_confirmation: String!
+}
+
+input SocialLoginInput {
+    provider: String!
+    token: String!
+}
+
+input VerifyEmailInput {
+    token: String!
+}
+
+input UpdatePassword {
+    old_password: String!
+    password: String! @rules(apply: ["confirmed", "min:8"])
+    password_confirmation: String!
+}
+
+input CreateUserInput {
+    name: String! @rules(apply: ["string"])
+    email: String! @rules(apply: ["email", "unique:users,email"])
+    password: String! @rules(apply: ["confirmed", "min:8"])
+    password_confirmation: String!
+    roles: [String] @argAccess(permission: ["assign roles", "revoke roles"])
+}
+
+input UpdateUserInput @validator {
+    name: String
+    email: String
+    password: String
+    password_confirmation: String
+    avatar: String
+    roles: [String] @argAccess(permission: ["assign roles", "revoke roles"])
+}

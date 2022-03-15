@@ -1,0 +1,151 @@
+// antd overides
+.ant-menu-inline,
+.ant-menu-vertical,
+.ant-menu-vertical-left {
+    border-right: none;
+
+    .ant-menu-item {
+        padding: 0 20px;
+        border-left: 3px solid transparent;
+    }
+
+    .ant-menu-item:hover,
+    .ant-menu-item-active {
+        border-color: @navbar-item-hover-color;
+        background-color: @navbar-item-bg-hover-color;
+    }
+
+    .ant-menu-item-selected {
+        border-color: @navbar-item-hover-color;
+    }
+}
+
+.main-navbar {
+    position: fixed;
+    display: flex;
+    flex: 0 0 @main-sidebar-width;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-right: 1px solid @navbar-border-color;
+    width: @main-sidebar-width;
+    height: 100vh;
+    max-width: @main-sidebar-width;
+    min-width: @main-sidebar-width;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    .user-link {
+        position: relative;
+        display: block;
+        margin: 0;
+        margin: 22px;
+        padding: 5px 0;
+        background-color: transparent;
+        cursor: pointer;
+        border: none;
+        outline: none;
+
+        &:hover {
+            .ant-avatar {
+                opacity: 0.9;
+            }
+        }
+
+        .ant-avatar {
+            transition: all 0.3s;
+        }
+    }
+}
+
+.user-menu {
+    .anticon {
+        display: flex;
+        flex: 1 1;
+        flex-direction: row;
+        align-items: center;
+        float: right;
+        height: 21px;
+    }
+}
+
+.page-sider {
+    position: fixed;
+    width: @page-sidebar-width;
+    height: 100vh;
+    max-width: @page-sidebar-width;
+    min-width: @page-sidebar-width;
+    left: @main-sidebar-width;
+    top: 0;
+    bottom: 0;
+}
+
+.navbar-menu {
+    flex: auto;
+}
+
+.navbar {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: @navbar-item-color;
+    font-size: @navbar-item-font-size;
+    text-align: left;
+    list-style: none;
+    outline: none;
+
+    .menu-item {
+        position: relative;
+        display: block;
+
+        a {
+            position: relative;
+            display: block;
+            margin: 0;
+            padding: 24px 16px 24px 13px;
+            overflow: hidden;
+            font-size: 0;
+            text-align: center;
+            border-left: 3px solid transparent;
+            background-color: transparent;
+            transition: border-color 0.3s, background-color 0.3s;
+
+            &:hover {
+                color: @navbar-item-hover-color;
+                background-color: @navbar-item-bg-hover-color;
+                border-color: @navbar-item-hover-color;
+
+                & svg {
+                    fill: @navbar-item-hover-color;
+                }
+            }
+        }
+
+        &.menu-item-selected a {
+            color: @navbar-item-hover-color;
+            border-color: @navbar-item-hover-color;
+
+            & svg {
+                fill: @navbar-item-hover-color;
+            }
+        }
+    }
+
+    .menu-item-icon svg {
+        max-width: 22px;
+        max-height: 22px;
+        transition: fill 0.3s;
+    }
+}
+
+.navbar-logo {
+    width: 36px;
+    padding: 15px 0;
+    margin: 0 auto;
+    backface-visibility: hidden;
+
+    .logo-link {
+        display: block;
+        height: 34px;
+    }
+}

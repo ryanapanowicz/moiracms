@@ -1,0 +1,81 @@
+.table-action {
+    flex: 0 0 auto;
+    padding: 0;
+    font-size: 0;
+    list-style: none;
+    white-space: nowrap;
+    outline: none;
+
+    & > li {
+        position: relative;
+        display: inline-block;
+        padding: 0 8px;
+        font-size: 14px;
+        line-height: 1.5715;
+        text-align: center;
+
+        &:first-child {
+            padding-left: 0;
+        }
+    }
+}
+
+.table-action-split {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 1px;
+    height: 14px;
+    margin-top: -7px;
+    background-color: #f0f0f0;
+}
+
+.item-list {
+    .ant-list-item-meta-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        white-space: nowrap;
+    }
+
+    .ant-list-item-meta-title {
+        margin: 0;
+    }
+}
+
+.back-link {
+    font-size: 16px;
+    line-height: 21px;
+    vertical-align: middle;
+    color: @text-color;
+    transition: color 0.3s;
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+        color: @navbar-item-hover-color;
+    }
+}
+
+.ant-notification {
+    .ant-notification-notice-message {
+        font-weight: 500;
+    }
+
+    .ant-notification-notice-success {
+        border-left: 3px solid @success-color;
+    }
+
+    .ant-notification-notice-error {
+        border-left: 3px solid @error-color;
+    }
+
+    .ant-notification-notice-info {
+        border-left: 3px solid @info-color;
+    }
+    
+    .ant-notification-notice-warning {
+        border-left: 3px solid @warning-color;
+    }
+}
