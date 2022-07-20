@@ -1,9 +1,11 @@
 import { Alert, Col, Row, Typography } from "antd";
 import React, { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/svg/moira-logo.svg";
 import { AuthLayout, LoginForm } from "../components";
 import { useLoginMutation } from "../graphql";
-import { Auth, History, UserContext } from "../services";
+import { Auth, UserContext } from "../services";
+import { LocationState } from "../services/types";
 import { formatError } from "../utils";
 
 const { Title } = Typography;
@@ -12,6 +14,9 @@ const Login: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [login, { error }] = useLoginMutation();
     const { query } = useContext(UserContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { state } = location as LocationState;
 
     const handleFinish = async (values: any) => {
         if (!submitting) {
@@ -34,9 +39,9 @@ const Login: React.FC = () => {
 
                     query();
 
-                    History.replace(
-                        History.location.state?.referrer || "/content/projects"
-                    );
+                    navigate(state?.referrer || "/content/projects", {
+                        replace: true,
+                    });
                 }
             } catch (e) {
                 setSubmitting(false);
@@ -47,12 +52,13 @@ const Login: React.FC = () => {
     useEffect(() => {
         // redirect away if already signed in
         if (Auth.isAuthenticated()) {
-            History.push("/");
+            navigate("/");
         }
 
         return () => {
             setSubmitting(false);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

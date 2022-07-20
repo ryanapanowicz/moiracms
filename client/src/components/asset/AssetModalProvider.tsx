@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import AssetModal, { AssetModalProps } from "./AssetModal";
 import AssetModalContext from "./AssetModalContext";
 
-const AssetModalProvider: React.FC = ({ children }) => {
+interface AssetModalProviderProps {
+    children?: React.ReactNode;
+}
+
+const AssetModalProvider: React.FC<AssetModalProviderProps> = ({
+    children,
+}) => {
     const [props, setProps] = useState<AssetModalProps>({});
     const [visible, setVisible] = useState(false);
 
@@ -23,7 +29,10 @@ const AssetModalProvider: React.FC = ({ children }) => {
     };
 
     const hideModal = () => {
-        setProps({ ...props, visible: false });
+        setProps((prevState) => ({
+            ...prevState,
+            visible: false,
+        }));
     };
 
     const renderModal = () => {

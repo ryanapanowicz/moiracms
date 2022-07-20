@@ -49,10 +49,10 @@ input AssetUploadInput {
     info: AssetInfoInput
     responsive: Boolean
     files: [Upload]! @rules(
-        apply: ["image", "max:8192"],
+        apply: ["image", "max:8191"],
         messages: [
             {
-                rule: "mimes",
+                rule: "image",
                 message: "Upload only allows these image types jpg, jpeg, png, bmp, gif, svg, or webp."
             },
             {

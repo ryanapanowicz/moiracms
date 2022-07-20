@@ -9,20 +9,16 @@ import { ProjectsQuery } from "../graphql/queries/useProjectsQuery";
 import { Can, notify, PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
-export interface ProjectParams {
-    id: string;
-}
-
 const UpdateProject: React.FC = () => {
     const { getVariables } = useContext(PaginatorContext);
-    const { id } = useParams<ProjectParams>();
     const [submitting, setSubmitting] = useState(false);
     const [projectData, setProjectData] = useState<any>();
+    const { id } = useParams();
 
     const [updateProject, { error: updateError }] = useUpdateProjectMutation();
 
     const { error: projectError } = useProjectQuery({
-        variables: { id: id },
+        variables: id ? { id: id } : undefined,
         onCompleted: ({ project }) => {
             if (project) {
                 // Filter out null values from Project
@@ -84,13 +80,13 @@ const UpdateProject: React.FC = () => {
     if (!projectData) {
         return <></>;
     }
-
+    
     return (
         <Layout className="page">
             <Affix className="header-affix">
                 <Layout.Header className="page-header">
                     <Space className="page-title" size="middle">
-                        <Link to="." className="back-link">
+                        <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
                         </Link>
                         <h2 className="page-title">

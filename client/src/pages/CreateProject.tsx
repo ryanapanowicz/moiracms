@@ -1,16 +1,17 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Affix, Alert, Button, Layout, Space } from "antd";
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CreateProjectForm } from "../components";
 import { useCreateProjectMutation } from "../graphql";
 import { ProjectsQuery } from "../graphql/queries/useProjectsQuery";
-import { History, notify, PaginatorContext } from "../services";
+import { notify, PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
 const CreateProject: React.FC = () => {
     const { getVariables } = useContext(PaginatorContext);
     const [submitting, setSubmitting] = useState(false);
+    const navigate = useNavigate();
 
     const [createProject, { error }] = useCreateProjectMutation();
 
@@ -37,9 +38,7 @@ const CreateProject: React.FC = () => {
                             description: `Project "${data.createProject.project.title}" successfully created!`,
                         });
 
-                        History.push({
-                            pathname: `./${data.createProject.project.id}`,
-                        });
+                        navigate(`${data.createProject.project.id}`);
                     }
                 })
                 .catch(() => {
@@ -47,13 +46,13 @@ const CreateProject: React.FC = () => {
                 });
         }
     };
-
+    
     return (
         <Layout className="page">
             <Affix className="header-affix">
                 <Layout.Header className="page-header">
                     <Space className="page-title" size="middle">
-                        <Link to="." className="back-link">
+                        <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
                         </Link>
                         <h2 className="title">Create Project</h2>

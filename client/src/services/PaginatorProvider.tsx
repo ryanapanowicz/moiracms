@@ -6,7 +6,11 @@ export interface PaginatorVariables {
     [key: string]: PagintatorInput;
 }
 
-const PaginatorProvider: React.FC = ({ children }) => {
+interface PaginatorProviderProps {
+    children?: React.ReactNode;
+}
+
+const PaginatorProvider: React.FC<PaginatorProviderProps> = ({ children }) => {
     const [state, setState] = useState<PaginatorVariables>({});
 
     const getVariables = (query: string) => {

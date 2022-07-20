@@ -2,13 +2,13 @@ import { ApolloError } from "@apollo/client";
 import React from "react";
 
 const formatError = (error: ApolloError): React.ReactNode => {
-    return error?.graphQLErrors.flatMap(({ extensions, message }, index) => {
+    return error?.graphQLErrors.flatMap(({ extensions, message }: any, index) => {
         switch (extensions?.category) {
             case "validation":
                 if (typeof extensions.validation === "object") {
                     return (
-                        <>
-                            {Object.values(extensions?.validation).flatMap(
+                        <div key={index}>
+                            {Object.values(extensions.validation).flatMap(
                                 (message, ind) => (
                                     <div key={ind}>
                                         {String(message).replace(
@@ -18,19 +18,19 @@ const formatError = (error: ApolloError): React.ReactNode => {
                                     </div>
                                 )
                             )}
-                        </>
+                        </div>
                     );
                 }
 
                 if (typeof extensions.errors === "object") {
                     return (
-                        <>
+                        <div key={index}>
                             {Object.values(extensions.errors).flatMap(
                                 (message: any, ind) => (
                                     <div key={ind}>{message}</div>
                                 )
                             )}
-                        </>
+                        </div>
                     );
                 }
 

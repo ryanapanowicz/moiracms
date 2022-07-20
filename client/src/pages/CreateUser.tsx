@@ -1,16 +1,17 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Affix, Alert, Button, Layout, Space } from "antd";
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CreateUserForm } from "../components";
 import { useCreateUserMutation } from "../graphql";
 import { UsersQuery } from "../graphql/queries/useUsersQuery";
-import { History, notify, PaginatorContext } from "../services";
+import { notify, PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
 const CreateUser: React.FC = () => {
     const { getVariables } = useContext(PaginatorContext);
     const [submitting, setSubmitting] = useState(false);
+    const navigate = useNavigate();
 
     const [createUser, { error }] = useCreateUserMutation();
 
@@ -34,9 +35,7 @@ const CreateUser: React.FC = () => {
                             description: `User "${data.createUser.user.name}" successfully created!`,
                         });
 
-                        History.push({
-                            pathname: `./${data.createUser.user.id}`,
-                        });
+                        navigate(`${data.createUser.user.id}`);
                     }
                 })
                 .catch(() => {
@@ -50,7 +49,7 @@ const CreateUser: React.FC = () => {
             <Affix className="header-affix">
                 <Layout.Header className="page-header">
                     <Space className="page-title" size="middle">
-                        <Link to="." className="back-link">
+                        <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
                         </Link>
                         <h2 className="title">Create User</h2>

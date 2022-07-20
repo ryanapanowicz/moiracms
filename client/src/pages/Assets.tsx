@@ -3,24 +3,20 @@ import { useAbility } from "@casl/react";
 import { Affix, Breadcrumb, Button, Col, Dropdown, Layout, Row } from "antd";
 import type { SelectEventHandler } from "rc-menu/lib/interface";
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     AdminLayout,
     AssetList,
     AssetModalContext,
-    SortOrderMenu,
+    SortOrderMenu
 } from "../components";
 import { sortOrderData } from "../components/form/SortOrderMenu";
 import { useAssetsQuery } from "../graphql";
-import { Can, History, PaginatorContext } from "../services";
+import { Can, PaginatorContext } from "../services";
 import { AbilityContext } from "../services/Can";
 
 const defaultSortOrder = sortOrderData[0];
 const defaultVariables = { first: 24, order_by: [defaultSortOrder.order] };
-
-interface AssetsParams {
-    uid: string;
-}
 
 const Assets: React.FC = () => {
     const { getVariables, setVariables } = useContext(PaginatorContext);
@@ -31,7 +27,8 @@ const Assets: React.FC = () => {
         pageSize: 24,
         total: 0,
     });
-    const { uid } = useParams<AssetsParams>();
+    const navigate = useNavigate();
+    const { "*": uid } = useParams();
 
     // If no query args set use defaults
     useEffect(() => {
@@ -86,7 +83,7 @@ const Assets: React.FC = () => {
     };
 
     const handleAssetClick = (file: any) => {
-        History.push(`/assets/${file.id}`);
+        navigate(`/assets/${file.id}`);
     };
 
     const handleSortOrder: SelectEventHandler = ({ key }) => {
@@ -110,7 +107,7 @@ const Assets: React.FC = () => {
     const hideAssetModal = () => {
         // Remove asset uid from url on close
         if (uid) {
-            History.push("/assets");
+            navigate("/assets");
         }
     };
 

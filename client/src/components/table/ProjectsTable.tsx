@@ -2,7 +2,7 @@ import { EditOutlined } from "@ant-design/icons";
 import { useAbility } from "@casl/react";
 import { Button, Divider, Space, Table } from "antd";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DeleteButton } from "..";
 import { useDeleteProjectMutation } from "../../graphql";
 import { notify, PaginatorContext } from "../../services";
@@ -41,8 +41,7 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
 }) => {
     const { getVariables, setVariables } = useContext(PaginatorContext);
     const [columns, setColumns] = useState(defaultCol);
-    const { url } = useRouteMatch();
-
+    
     const ability = useAbility(AbilityContext);
     const canEdit = ability.can("edit", "projects");
     const canDelete = ability.can("delete", "projects");
@@ -123,7 +122,7 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
                     render: (_: any, { id }: any) => (
                         <Space split={<Divider type="vertical" />}>
                             {canEdit && (
-                                <Link to={`${url}/${id}`}>
+                                <Link to={`${id}`}>
                                     <Button
                                         type="link"
                                         icon={<EditOutlined />}

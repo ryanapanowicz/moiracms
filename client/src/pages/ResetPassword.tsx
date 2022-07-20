@@ -5,14 +5,10 @@ import { AuthLayout, ResetPasswordForm } from "../components";
 import { useResetPasswordMutation } from "../graphql";
 import { formatError } from "../utils";
 
-interface ResetPasswordParams {
-    token: string;
-}
-
 const { Title } = Typography;
 
 const ResetPassword: React.FC = () => {
-    const { token } = useParams<ResetPasswordParams>();
+    const { token } = useParams();
     const [submitting, setSubmitting] = useState(false);
     const [resetPassword, { data, error }] = useResetPasswordMutation();
 

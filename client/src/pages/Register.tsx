@@ -1,9 +1,11 @@
 import { Alert, Col, Row, Typography } from "antd";
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/svg/moira-logo.svg";
 import { AuthLayout, RegisterForm } from "../components";
 import { useRegisterMutation } from "../graphql/mutations";
-import { Auth, History } from "../services";
+import { Auth } from "../services";
+import { LocationState } from "../services/types";
 import { formatError } from "../utils";
 
 const { Title } = Typography;
@@ -11,6 +13,9 @@ const { Title } = Typography;
 const Register: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [register, { error }] = useRegisterMutation();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { state } = location as LocationState;
 
     const handleFinish = (values: any) => {
         if (!submitting) {
@@ -27,9 +32,7 @@ const Register: React.FC = () => {
                             refreshToken: tokens.refresh_token,
                             expiresIn: tokens.expires_in,
                         });
-                        History.replace(
-                            History.location.state?.referrer || "/"
-                        );
+                        navigate(state?.referrer || "/", { replace: true });
                     }
                 })
                 .finally(() => setSubmitting(false));
@@ -41,8 +44,9 @@ const Register: React.FC = () => {
     useEffect(() => {
         // redirect away if already signed in
         if (Auth.isAuthenticated()) {
-            History.push("/");
+            navigate("/");
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

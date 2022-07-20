@@ -63,7 +63,8 @@ const Profile: React.FC = () => {
 
                     // Redirect success message on complete
                     if (data?.updateUser.user) {
-                        // Reset form values
+                        // Reset form password values
+                        form.resetFields(['password', 'password_confirmation']);
                         setToggle(false);
 
                         notify.success({

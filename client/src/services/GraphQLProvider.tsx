@@ -2,13 +2,13 @@ import {
     ApolloClient,
     ApolloProvider,
     from,
-    fromPromise,
+    fromPromise
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { ErrorResponse, onError } from "@apollo/client/link/error";
 import { createUploadLink } from "apollo-upload-client";
 import React from "react";
-import { Auth, Cache, History, refreshToken } from ".";
+import { Auth, Cache, refreshToken } from ".";
 
 const httpLink = createUploadLink({
     uri: process.env.GRAPHQL_URI || "http://localhost:8000/graphql",
@@ -25,12 +25,7 @@ const authLink = setContext((_, { Headers }) => {
 });
 
 const errorLink = onError(
-    ({
-        graphQLErrors,
-        networkError,
-        operation,
-        forward,
-    }: ErrorResponse): any => {
+    ({ graphQLErrors, networkError, operation, forward }: ErrorResponse) => {
         if (graphQLErrors) {
             for (let { message } of graphQLErrors) {
                 switch (message) {
@@ -45,11 +40,7 @@ const errorLink = onError(
                                 ({ data, errors }) => {
                                     if (errors) {
                                         Auth.deleteToken();
-                                        History.push("/login", {
-                                            referrer:
-                                                History.location.state
-                                                    ?.referrer,
-                                        });
+                                        window.location.reload();
                                     } else {
                                         Auth.setToken({
                                             accessToken:
@@ -91,7 +82,11 @@ const client = new ApolloClient({
     },
 });
 
-const GraphQLProvider: React.FC = ({ children }) => {
+interface GraphQLProviderProps {
+    children?: React.ReactNode;
+}
+
+const GraphQLProvider: React.FC<GraphQLProviderProps> = ({ children }) => {
     return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 

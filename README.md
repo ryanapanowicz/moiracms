@@ -1,9 +1,9 @@
 <p align="center"><img src="https://raw.githubusercontent.com/ryanapanowicz/moiracms/main/client/src/assets/svg/moira-logo.svg" width="150"></p>
 
 <p align="center">
-    <a href="https://laravel.com/"><img src="https://img.shields.io/badge/laravel-8.12-blue" alt="laravel 9.2"></a>
-    <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/react-17.0.2-blue" alt="react 17.0.2"></a>
-    <a href="https://ant.design/"><img src="https://img.shields.io/badge/antd-4.16.13-blue" alt="antd 4.16.13"></a>
+    <a href="https://laravel.com/"><img src="https://img.shields.io/badge/laravel-9.19-blue" alt="laravel 9.19"></a>
+    <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/react-18.2.0-blue" alt="react 18.2.0"></a>
+    <a href="https://ant.design/"><img src="https://img.shields.io/badge/antd-4.21.7-blue" alt="antd 4.21.7"></a>
 </p>
 
 ## About Moira CMS
@@ -22,7 +22,7 @@ Moira CMS is a simple headless CMS powered by Laravel, GraphQL, React, and Ant D
 - Run ```cp .env.example .env```
 - Run ```composer install```
 - Add database name, username and password in .env
-- Run ```php artisan moiracms:install``` and follow promts.
+- Run ```php artisan moiracms:install``` and follow prompts.
 - Run ```php artisan serve```
 
 You can interact with the GraphQL API in a development environment by visiting http://localhost:8000/graphql-playground

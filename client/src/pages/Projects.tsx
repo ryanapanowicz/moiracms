@@ -1,12 +1,12 @@
 import { Affix, Breadcrumb, Button, Layout } from "antd";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ProjectsTable } from "../components";
 import { useProjectsQuery } from "../graphql";
 import { Can, notify, PaginatorContext } from "../services";
 import { formatError, getSorterVars } from "../utils";
 
-const Projects: React.FC<RouteComponentProps> = ({ match }) => {
+const Projects: React.FC = () => {
     const { getVariables, setVariables } = useContext(PaginatorContext);
     const [paginate, setPaginate] = useState({
         current: 1,
@@ -68,7 +68,7 @@ const Projects: React.FC<RouteComponentProps> = ({ match }) => {
                     <Can do="create" on="projects">
                         <div className="page-tools">
                             <Button type="primary">
-                                <Link to={`${match.path}/create`}>
+                                <Link to="create">
                                     Create new Project
                                 </Link>
                             </Button>

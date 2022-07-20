@@ -1,17 +1,12 @@
 import { Layout, Menu } from "antd";
 import React from "react";
-import {
-    Link,
-    Redirect,
-    Route,
-    RouteComponentProps,
-    Switch,
-} from "react-router-dom";
+import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { CreateProject, Projects, UpdateProject } from ".";
 import { AdminLayout } from "../components";
-import { ProtectedRoute } from "../services";
+import { RequireAuth } from "../services";
 
-const Content: React.FC<RouteComponentProps> = ({ match, location }) => {
+const Content: React.FC = () => {
+    const location = useLocation();
     // Only use first two forward slashes in the url
     const locationKey = location.pathname.split("/").slice(0, 3).join("/");
 
@@ -22,33 +17,36 @@ const Content: React.FC<RouteComponentProps> = ({ match, location }) => {
                     <div className="page-sider-title">
                         <h1>Content</h1>
                     </div>
-                    <Menu selectedKeys={[locationKey]}>
-                        <Menu.Item key={`${match.path}/projects`}>
-                            <Link to={`${match.path}/projects`}>Projects</Link>
-                        </Menu.Item>
-                    </Menu>
+                    <Menu
+                        selectedKeys={[locationKey]}
+                        items={[
+                            {
+                                key: `/content/projects`,
+                                label: <Link to={`projects`}>Projects</Link>,
+                            },
+                        ]}
+                    />
                 </Layout.Sider>
-                <Switch>
-                    <ProtectedRoute
-                        can={{ action: "create", subject: "projects" }}
-                        path={`${match.path}/projects/create`}
-                        component={CreateProject}
-                    />
+                <Routes>
                     <Route
-                        path={`${match.path}/projects/:id`}
-                        component={UpdateProject}
+                        key="projects/create"
+                        path="projects/create"
+                        element={
+                            <RequireAuth
+                                can={{ action: "create", subject: "projects" }}
+                                redirectTo="/login"
+                            >
+                                <CreateProject />
+                            </RequireAuth>
+                        }
                     />
+                    <Route path="projects/:id" element={<UpdateProject />} />
+                    <Route path="projects" element={<Projects />} />
                     <Route
-                        path={`${match.path}/projects`}
-                        component={Projects}
+                        path="*"
+                        element={<Navigate replace to="projects" />}
                     />
-                    <Route
-                        path={match.path}
-                        render={() => (
-                            <Redirect to={`${match.path}/projects`} />
-                        )}
-                    />
-                </Switch>
+                </Routes>
             </Layout>
         </AdminLayout>
     );

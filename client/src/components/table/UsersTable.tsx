@@ -2,7 +2,7 @@ import { EditOutlined } from "@ant-design/icons";
 import { useAbility } from "@casl/react";
 import { Button, Divider, Space, Table, Tag } from "antd";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DeleteButton } from "..";
 import { useDeleteUserMutation } from "../../graphql";
 import { notify, PaginatorContext } from "../../services";
@@ -42,7 +42,6 @@ const UsersTable: React.FC<UsersTableProps> = ({
 }) => {
     const { getVariables, setVariables } = useContext(PaginatorContext);
     const [columns, setColumns] = useState(defaultCol);
-    const { url } = useRouteMatch();
 
     const ability = useAbility(AbilityContext);
 
@@ -141,7 +140,7 @@ const UsersTable: React.FC<UsersTableProps> = ({
                 render: (_: any, { id, name }: any) => (
                     <Space split={<Divider type="vertical" />}>
                         {ability.can("edit", "users") && (
-                            <Link to={`${url}/${id}`}>
+                            <Link to={`${id}`}>
                                 <Button type="link" icon={<EditOutlined />} />
                             </Link>
                         )}

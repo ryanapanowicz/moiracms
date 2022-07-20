@@ -1,9 +1,9 @@
 import { Alert, Button, Col, Divider, Row, Typography } from "antd";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthLayout, ForgotPasswordForm } from "../components";
 import { useForgotPasswordMutation } from "../graphql";
-import { Auth, History } from "../services";
+import { Auth } from "../services";
 import { formatError } from "../utils";
 
 const { Title } = Typography;
@@ -11,6 +11,7 @@ const { Title } = Typography;
 const ForgotPassword: React.FC = () => {
     const [forgotPassword, { error }] = useForgotPasswordMutation();
     const [submitting, setSubmitting] = useState(false);
+    const navigate = useNavigate();
     const [data, setData] = useState<any>();
 
     const handleFinish = (values: any) => {
@@ -38,8 +39,9 @@ const ForgotPassword: React.FC = () => {
     useEffect(() => {
         // redirect away if already signed in
         if (Auth.isAuthenticated()) {
-            History.push("/");
+            navigate("/");
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -76,7 +78,10 @@ const ForgotPassword: React.FC = () => {
                         <Col>
                             <p>
                                 Didn't recieve an email?{" "}
-                                <a href="/password/forgot" onClick={handleReset}>
+                                <a
+                                    href="/password/forgot"
+                                    onClick={handleReset}
+                                >
                                     Try another email address
                                 </a>
                             </p>

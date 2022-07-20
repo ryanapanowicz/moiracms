@@ -23,11 +23,11 @@ const Viewer: React.FC<ViewerProps> = ({ maxSelection, onSubmit }) => {
     const ability = useAbility(AbilityContext);
 
     const [selected, setSelected] = useState<any[]>([]);
-    const [paginate, setPaginate] = useState({
+    const paginate = {
         current: 1,
         pageSize: 24,
         total: 0,
-    });
+    };
 
     // If no query args set use defaults
     useEffect(() => {
@@ -61,6 +61,18 @@ const Viewer: React.FC<ViewerProps> = ({ maxSelection, onSubmit }) => {
             ? getVariables("assets")
             : defaultVariables,
     });
+
+    // Update pagination on data change
+    if (data && "assets" in data) {
+        const { currentPage, total, perPage, count } =
+            data.assets.paginatorInfo;
+
+        Object.assign(paginate, {
+            current: count <= 0 ? 0 : currentPage,
+            pageSize: perPage,
+            total: total,
+        });
+    }
 
     const handleChange = (page: number, pageSize?: number | undefined) => {
         const variables = {
@@ -105,19 +117,6 @@ const Viewer: React.FC<ViewerProps> = ({ maxSelection, onSubmit }) => {
             setSelected([...selected, file]);
         }
     };
-
-    // Update pagination on data change
-    useEffect(() => {
-        if (data && "assets" in data) {
-            const { currentPage, total, perPage, count } =
-                data.assets.paginatorInfo;
-            setPaginate({
-                current: count <= 0 ? 0 : currentPage,
-                pageSize: perPage,
-                total: total,
-            });
-        }
-    }, [data]);
 
     return (
         <>

@@ -1,30 +1,25 @@
 import { useAbility } from "@casl/react";
 import { Layout, Menu } from "antd";
 import React, { useMemo } from "react";
-import {
-    Link,
-    Redirect,
-    Route,
-    RouteComponentProps,
-    Switch,
-} from "react-router-dom";
+import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import {
     CreateUser,
     Permissions,
     Roles,
     UpdateRole,
     UpdateUser,
-    Users,
+    Users
 } from ".";
 import { AdminLayout } from "../components";
-import { ProtectedRoute } from "../services";
+import { RequireAuth } from "../services";
 import { AbilityContext } from "../services/Can";
 import { titleCase } from "../utils";
 
 const defaultMenu = ["users", "roles", "permissions"];
 
-const Settings: React.FC<RouteComponentProps> = ({ match, location }) => {
+const Settings: React.FC = () => {
     const ability = useAbility(AbilityContext);
+    const location = useLocation();
 
     // Only use first two forward slashes in the url
     const locationKey = location.pathname.split("/").slice(0, 3).join("/");
@@ -33,10 +28,10 @@ const Settings: React.FC<RouteComponentProps> = ({ match, location }) => {
         () =>
             defaultMenu.map((name) => ({
                 title: titleCase(name),
-                url: `${match.path}/${name}`,
+                url: `${name}`,
                 enabled: ability.can("view", name),
             })),
-        [match.path, ability]
+        [ability]
     );
 
     return (
@@ -47,61 +42,96 @@ const Settings: React.FC<RouteComponentProps> = ({ match, location }) => {
                         <div className="page-sider-title">
                             <h1>Settings</h1>
                         </div>
-                        <Menu selectedKeys={[locationKey]}>
-                            {menu.map((item) => (
-                                <Menu.Item
-                                    key={item.url}
-                                    disabled={!item.enabled}
-                                >
-                                    <Link to={item.url}>{item.title}</Link>
-                                </Menu.Item>
-                            ))}
-                        </Menu>
+                        <Menu
+                            selectedKeys={[locationKey]}
+                            items={menu.map((item) => ({
+                                key: `/settings/${item.url}`,
+                                disabled: !item.enabled,
+                                label: <Link to={item.url}>{item.title}</Link>,
+                            }))}
+                        />
                     </Layout.Sider>
                 )}
-                <Switch>
-                    <ProtectedRoute
-                        can={{ action: "create", subject: "users" }}
-                        path={`${match.path}/users/create`}
-                        component={CreateUser}
-                    />
-                    <ProtectedRoute
-                        can={{ action: "view", subject: "users" }}
-                        path={`${match.path}/users/:id`}
-                        component={UpdateUser}
-                    />
-                    <ProtectedRoute
-                        can={{ action: "view", subject: "users" }}
-                        path={`${match.path}/users`}
-                        component={Users}
-                    />
-                    <ProtectedRoute
-                        can={{ action: "view", subject: "roles" }}
-                        path={`${match.path}/roles/:id`}
-                        component={UpdateRole}
-                    />
-                    <ProtectedRoute
-                        can={{ action: "view", subject: "roles" }}
-                        path={`${match.path}/roles`}
-                        component={Roles}
-                    />
-                    <ProtectedRoute
-                        can={{ action: "view", subject: "permissions" }}
-                        path={`${match.path}/permissions`}
-                        component={Permissions}
+                <Routes>
+                    <Route
+                        path="users/create"
+                        element={
+                            <RequireAuth
+                                can={{ action: "create", subject: "projects" }}
+                                redirectTo="/login"
+                            >
+                                <CreateUser />
+                            </RequireAuth>
+                        }
                     />
                     <Route
-                        path={match.path}
-                        render={() => (
-                            <Redirect
+                        path="users/:id"
+                        element={
+                            <RequireAuth
+                                can={{ action: "view", subject: "users" }}
+                                redirectTo="/login"
+                            >
+                                <UpdateUser />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="users"
+                        element={
+                            <RequireAuth
+                                can={{ action: "view", subject: "users" }}
+                                redirectTo="/login"
+                            >
+                                <Users />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="roles/:id"
+                        element={
+                            <RequireAuth
+                                can={{ action: "view", subject: "roles" }}
+                                redirectTo="/login"
+                            >
+                                <UpdateRole />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="roles"
+                        element={
+                            <RequireAuth
+                                can={{ action: "view", subject: "roles" }}
+                                redirectTo="/login"
+                            >
+                                <Roles />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="permissions"
+                        element={
+                            <RequireAuth
+                                can={{ action: "view", subject: "permissions" }}
+                                redirectTo="/login"
+                            >
+                                <Permissions />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="*"
+                        element={
+                            <Navigate
+                                replace
                                 to={`${
                                     menu.find((item) => item.enabled)?.url ||
                                     "404"
                                 }`}
                             />
-                        )}
+                        }
                     />
-                </Switch>
+                </Routes>
             </Layout>
         </AdminLayout>
     );

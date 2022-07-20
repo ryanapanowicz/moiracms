@@ -6,6 +6,12 @@ import { AssetModalContext } from "..";
 // Add image resize module
 Quill.register("modules/imageResize", ImageResize);
 
+declare global {
+    interface Window { Quill: any; }
+}
+
+window.Quill = window.Quill || Quill;
+
 // Add undo/redo icons to Quill
 let icons = ReactQuill.Quill.import("ui/icons");
 icons["undo"] =
@@ -121,6 +127,9 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                     opacity: "1",
                 },
                 modules: ["Resize", "DisplaySize"],
+                checkImage: (evt: any) => {
+                    console.log(evt);
+                },
             },
             history: {
                 delay: 2000,

@@ -2,17 +2,13 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useVerifyEmailMutation from "../graphql/mutations/useVerifyEmailMutation";
 
-interface VerifyEmailParams {
-    token: string;
-}
-
 const VerifyEmail: React.FC = () => {
-    const { token } = useParams<VerifyEmailParams>();
+    const { token } = useParams();
     const [verifyEmail, { data, error }] = useVerifyEmailMutation();
 
     useEffect(() => {
         verifyEmail({
-            variables: { token: token },
+            variables: token ? { token: token } : undefined,
             fetchPolicy: "network-only",
         });
     }, [verifyEmail, token]);

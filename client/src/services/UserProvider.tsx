@@ -1,14 +1,20 @@
 import { useApolloClient } from "@apollo/client";
 import { useAbility } from "@casl/react";
 import React, { useEffect, useState } from "react";
-import { Auth, History, UserContext } from ".";
+import { useNavigate } from "react-router-dom";
+import { Auth, UserContext } from ".";
 import { useLogoutMutation, useMeLazyQuery } from "../graphql";
 import { AbilityContext } from "./Can";
 import updateAbility from "./updateAbility";
 
-const UserProvider: React.FC = ({ children }) => {
+interface UserProviderProps {
+    children?: React.ReactNode;
+}
+
+const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const ability = useAbility(AbilityContext);
     const client = useApolloClient();
+    const navigate = useNavigate();
 
     // Used to pause render until User info
     // is fetched and permissions are set
@@ -26,7 +32,7 @@ const UserProvider: React.FC = ({ children }) => {
             Auth.deleteToken();
             await client.clearStore();
             setReady(false);
-            History.push("/login");
+            navigate("/login");
         },
     });
 
@@ -36,7 +42,7 @@ const UserProvider: React.FC = ({ children }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
     return (
         <UserContext.Provider value={{ user: data, query: me, logout: logout }}>
             {(!Auth.isAuthenticated() || ready) && children}

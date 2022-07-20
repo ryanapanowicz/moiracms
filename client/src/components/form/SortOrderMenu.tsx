@@ -41,12 +41,13 @@ export const sortOrderData: sortOrderType[] = [
     },
 ];
 
-const SortOrderMenu: React.FC<MenuProps> = (props) => (
-    <Menu {...props}>
-        {sortOrderData.map(({ key, label }) => (
-            <Menu.Item key={key}>{label}</Menu.Item>
-        ))}
-    </Menu>
-);
+const SortOrderMenu: React.FC<MenuProps> = (props) => {
+    const menuProps = {
+        items: sortOrderData.map(({ key, label }) => ({ key, label })),
+        ...props,
+    };
+
+    return <Menu {...menuProps} />;
+};
 
 export default SortOrderMenu;

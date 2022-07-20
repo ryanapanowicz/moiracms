@@ -13,14 +13,26 @@ import { AbilityContext } from "../../services/Can";
 import { getInitials } from "../../utils";
 
 const userMenu = (user?: MeType, onLogout?: () => void) => (
-    <Menu className="user-menu" style={{ width: "140px" }}>
-        <Menu.Item key="profile">
-            <Link to="/profile">Profile</Link>
-        </Menu.Item>
-        <Menu.Item key="logout" danger onClick={onLogout}>
-            Logout <LogoutOutlined />
-        </Menu.Item>
-    </Menu>
+    <Menu
+        className="user-menu"
+        style={{ width: "140px" }}
+        items={[
+            {
+                key: "profile",
+                label: <Link to="/profile">Profile</Link>,
+            },
+            {
+                key: "logout",
+                danger: true,
+                label: (
+                    <>
+                        Logout <LogoutOutlined />
+                    </>
+                ),
+                onClick: onLogout,
+            },
+        ]}
+    />
 );
 
 const Sidebar: React.FC = () => {
@@ -78,7 +90,10 @@ const Sidebar: React.FC = () => {
                     </li>
                     {canViewSettings && (
                         <li className={getClassName("/settings")}>
-                            <Link to={getPathname("/settings")} title="Settings">
+                            <Link
+                                to={getPathname("/settings")}
+                                title="Settings"
+                            >
                                 <span className="menu-item-icon">
                                     <Settings />
                                 </span>

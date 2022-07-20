@@ -30,10 +30,10 @@ const AssetModal: React.FC<AssetModalProps> = ({
     onClose,
 }) => {
     const { showModal, hideModal } = useContext(AssetModalContext);
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(visible);
     const [submitting, setSubmitting] = useState(false);
-    const [width, setWidth] = useState(modalDefaultWidth);
-
+    const width = type === "view" ? 1200 : modalDefaultWidth;
+    
     const showGallery =
         typeof gallery === "boolean" ? gallery : gallery.enabled;
 
@@ -50,14 +50,6 @@ const AssetModal: React.FC<AssetModalProps> = ({
     const handleSubmit = (assets: any[]) => {
         typeof onSubmit === "function" && onSubmit(assets);
     };
-
-    useEffect(() => {
-        if (type === "view") {
-            setWidth(1200);
-        } else {
-            setWidth(modalDefaultWidth);
-        }
-    }, [type]);
 
     useEffect(() => {
         setIsVisible(visible);

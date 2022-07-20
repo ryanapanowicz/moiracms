@@ -2,7 +2,7 @@ import { EditOutlined } from "@ant-design/icons";
 import { useAbility } from "@casl/react";
 import { Button, List } from "antd";
 import React, { useContext } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DeleteButton } from "..";
 import { useDeleteRoleMutation } from "../../graphql";
 import { MeQuery } from "../../graphql/queries/useMeQuery";
@@ -23,8 +23,6 @@ const RolesList: React.FC<RolesListProps> = ({
     onChange,
 }) => {
     const { setVariables } = useContext(PaginatorContext);
-    const { url } = useRouteMatch();
-
     const ability = useAbility(AbilityContext);
     const canEdit = ability.can("edit", "roles");
     const canDelete = ability.can("delete", "roles");
@@ -91,7 +89,7 @@ const RolesList: React.FC<RolesListProps> = ({
                     actions={[
                         ...(canEdit
                             ? [
-                                  <Link to={`${url}/${id}`}>
+                                  <Link to={`${id}`}>
                                       <Button
                                           type="link"
                                           icon={<EditOutlined />}

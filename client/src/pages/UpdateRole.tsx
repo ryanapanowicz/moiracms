@@ -17,17 +17,13 @@ export type RoleDataType = {
     roles?: string[];
 } | null;
 
-export interface RoleParams {
-    id: string;
-}
-
 const UpdateRole: React.FC = () => {
     const [visible, setVisible] = useState(false);
     const ability = useAbility(AbilityContext);
-    const { id } = useParams<RoleParams>();
+    const { id } = useParams();
 
     const { data, loading, error } = useRoleQuery({
-        variables: { id: id },
+        variables: id ? { id: id } : undefined,
     });
 
     const showModal = () => {
@@ -62,7 +58,7 @@ const UpdateRole: React.FC = () => {
             <Affix className="header-affix">
                 <Layout.Header className="page-header">
                     <Space className="page-title" size="middle">
-                        <Link to="." className="back-link">
+                        <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
                         </Link>
                         <h2 className="title">Edit {data?.role.name} Role</h2>

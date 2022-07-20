@@ -17,14 +17,10 @@ export type UserDataType = {
     roles?: string[];
 } | null;
 
-export interface UserParams {
-    id: string;
-}
-
 const UpdateUser: React.FC = () => {
     const { getVariables } = useContext(PaginatorContext);
     const { user } = useContext(UserContext);
-    const { id } = useParams<UserParams>();
+    const { id } = useParams();
 
     const [submitting, setSubmitting] = useState(false);
     const [userData, setUserData] = useState<UserDataType>();
@@ -35,7 +31,7 @@ const UpdateUser: React.FC = () => {
     const [updateUser, { error: updateError }] = useUpdateUserMutation();
 
     const { error: userError } = useUserQuery({
-        variables: { id: id },
+        variables: id ? { id: id } : undefined,
         onCompleted: ({ user }) => {
             if (user) {
                 setUserData({
@@ -79,8 +75,8 @@ const UpdateUser: React.FC = () => {
 
                     // Redirect success message on complete
                     if (data?.updateUser.user) {
-                        // Reset form values
-                        form.resetFields();
+                        // Reset form password values
+                        form.resetFields(['password', 'password_confirmation']);
                         setToggle(false);
 
                         notify.success({
@@ -117,7 +113,7 @@ const UpdateUser: React.FC = () => {
             <Affix className="header-affix">
                 <Layout.Header className="page-header">
                     <Space className="page-title" size="middle">
-                        <Link to="." className="back-link">
+                        <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
                         </Link>
                         <h2 className="page-title">Update {userData.name}</h2>

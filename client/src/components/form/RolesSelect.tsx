@@ -3,12 +3,15 @@ import React, { useState } from "react";
 import { useRolesQuery } from "../../graphql";
 
 const RolesSelect: React.FC<SelectProps<any>> = (props) => {
-    const [options, setOptions] = useState([{ value: "" }]);
+    const [options, setOptions] = useState([{ label: "", value: "" }]);
 
     // Get data for Role select field
     const { loading } = useRolesQuery({
         onCompleted: ({ roles }) => {
-            const list = roles.data.map(({ name }) => ({ value: name }));
+            const list = roles.data.map(({ name }) => ({
+                label: name,
+                value: name,
+            }));
             setOptions(list);
         },
     });

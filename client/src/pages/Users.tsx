@@ -1,12 +1,12 @@
 import { Affix, Breadcrumb, Button, Layout } from "antd";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { UsersTable } from "../components";
 import { useUsersQuery } from "../graphql";
 import { Can, notify, PaginatorContext } from "../services";
 import { formatError, getSorterVars } from "../utils";
 
-const Users: React.FC<RouteComponentProps> = ({ match }) => {
+const Users: React.FC = () => {
     const { getVariables, setVariables } = useContext(PaginatorContext);
     const [paginate, setPaginate] = useState({
         current: 1,
@@ -70,7 +70,7 @@ const Users: React.FC<RouteComponentProps> = ({ match }) => {
                     <Can do="create" on="users">
                         <div className="page-tools">
                             <Button type="primary">
-                                <Link to={`${match.path}/create`}>
+                                <Link to="create">
                                     Create new User
                                 </Link>
                             </Button>
