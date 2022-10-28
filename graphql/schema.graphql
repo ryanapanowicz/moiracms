@@ -34,8 +34,10 @@ type Project {
     built_with: [String]
     keywords: [String]
     description: String
-    assets: [Media!]
+    assets: [Media!] @orderBy(column: "order_id")
     user: User!
+    start: Date
+    end: Date
     created_at: DateTime!
     updated_at: DateTime!
 }
@@ -47,6 +49,8 @@ input CreateProjectInput {
     built_with: [String]
     keywords: [String]
     description: String
+    start: Date @rules(apply: ["before:end", "nullable"])
+    end: Date @rules(apply: ["after:start", "nullable"])
     assets: [ID]
 }
 
@@ -58,6 +62,8 @@ input UpdateProjectInput @validator {
     built_with: [String]
     keywords: [String]
     description: String
+    start: Date
+    end: Date
     assets: [ID]
 }
 

@@ -19,7 +19,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
 }) => {
     return (
         <Card
-            className={`asset-item ${className}`}
+            className={["asset-item", className].join(" ").trim()}
             size="small"
             bordered={false}
             cover={

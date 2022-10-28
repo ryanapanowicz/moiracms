@@ -31,6 +31,8 @@
 
 .asset-item {
     cursor: pointer;
+    background-color: transparent;
+    transition: all 350ms ease;
 
     &:hover {
         & .ant-image-mask {
@@ -204,6 +206,49 @@
     }
 }
 
+.asset-input {
+    position: relative;
+    display: block;
+    margin-top: 20px;
+
+    .ant-list-empty-text {
+        padding: 0;
+    }
+
+    .ant-list-item {
+        position: relative;
+
+        &:hover {
+            .draggable-handle {
+                left: -10px;
+                top: -10px;
+                width: @btn-circle-size;
+                height: @btn-circle-size;
+                opacity: 1;
+            }
+
+            .asset-input-remove {
+                right: -10px;
+                top: -10px;
+                width: @btn-circle-size;
+                height: @btn-circle-size;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.asset-input-remove {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    min-width: 0;
+    height: 0;
+    right: 4px;
+    top: 4px;
+    transition: all @animation-duration-base @ease-in-out-quint;
+}
+
 .modal-spin-container {
     display: flex;
     flex: 1 1 auto;
@@ -212,4 +257,31 @@
     justify-content: center;
     text-align: center;
     min-height: 473px;
+}
+
+.draggable {
+    .draggable-handle {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        min-width: 0;
+        height: 0;
+        left: 4px;
+        top: 4px;
+        transition: all @animation-duration-base @ease-in-out-quint;
+    }
+
+    &.is-dragging {
+        position: relative;
+        z-index: 100;
+    
+        .asset-item {
+            transform: scale(1.05);
+            opacity: 0.85;
+        }
+    
+        .ant-card-cover {
+            box-shadow: @shadow-2;
+        }
+    }
 }

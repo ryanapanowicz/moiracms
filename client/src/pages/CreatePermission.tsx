@@ -73,7 +73,7 @@ const CreatePermission: React.FC<CreatePermissionProps> = ({
     return (
         <Modal
             title="Create Permission"
-            visible={isVisible}
+            open={isVisible}
             afterClose={onClose}
             onCancel={handleCancel}
             onOk={handleOk}

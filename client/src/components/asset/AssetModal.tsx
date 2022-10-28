@@ -33,13 +33,15 @@ const AssetModal: React.FC<AssetModalProps> = ({
     const [isVisible, setIsVisible] = useState(visible);
     const [submitting, setSubmitting] = useState(false);
     const width = type === "view" ? 1200 : modalDefaultWidth;
-    
+
     const showGallery =
         typeof gallery === "boolean" ? gallery : gallery.enabled;
 
     // If maxSelection is undefined selection amount is infinite
-    const maxSelection =
-        typeof gallery === "object" ? gallery.maxSelection : undefined;
+    let maxSelection = undefined;
+    if (typeof gallery === "object") {
+        ({ maxSelection } = gallery);
+    }
 
     const handleCancel = () => {
         if (!submitting) {
@@ -58,7 +60,7 @@ const AssetModal: React.FC<AssetModalProps> = ({
     return (
         <Modal
             className={`asset-modal asset-modal-${type}`}
-            visible={isVisible}
+            open={isVisible}
             afterClose={onClose}
             onCancel={handleCancel}
             width={width}

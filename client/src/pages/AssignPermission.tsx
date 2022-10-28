@@ -80,7 +80,7 @@ const AssignPermission: React.FC<AssignPermissionProps> = ({
     return (
         <Modal
             title="Assign Permission"
-            visible={isVisible}
+            open={isVisible}
             afterClose={onClose}
             onCancel={handleCancel}
             onOk={handleOk}

@@ -19,8 +19,14 @@ const CreateProject: React.FC = () => {
         if (!submitting) {
             setSubmitting(true);
 
+            const [start, end] = values.project_time || [];
+
             createProject({
-                variables: values,
+                variables: {
+                    ...values,
+                    start: start ? start.format("YYYY-MM-DD") : null,
+                    end: end ? end.format("YYYY-MM-DD") : null,
+                },
                 refetchQueries: [
                     {
                         query: ProjectsQuery,
@@ -46,7 +52,7 @@ const CreateProject: React.FC = () => {
                 });
         }
     };
-    
+
     return (
         <Layout className="page">
             <Affix className="header-affix">

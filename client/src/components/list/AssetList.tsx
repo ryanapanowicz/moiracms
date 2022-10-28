@@ -34,13 +34,14 @@ const AssetList: React.FC<AssetListProps> = ({
     };
 
     const itemClassName = (file: any): string => {
-        let className = "";
+        let classNames: string[] = [];
 
-        selected.forEach((item) => {
-            if (item?.id === file?.id) className = "asset-selected";
-        });
+        // Add selected class
+        selected.forEach(
+            (item) => item?.id === file?.id && classNames.push("asset-selected")
+        );
 
-        return className;
+        return classNames.join(" ");
     };
 
     return (

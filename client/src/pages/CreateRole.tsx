@@ -73,7 +73,7 @@ const CreateRole: React.FC<CreateRoleProps> = ({
     return (
         <Modal
             title="Create Role"
-            visible={isVisible}
+            open={isVisible}
             afterClose={onClose}
             onCancel={handleCancel}
             onOk={handleOk}

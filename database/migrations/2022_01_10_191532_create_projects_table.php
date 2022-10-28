@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateProjectsTable extends Migration
 {
@@ -19,6 +19,8 @@ class CreateProjectsTable extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->longText('content');
+            $table->date('start')->nullable();
+            $table->date('end')->nullable();
             $table->string('link')->nullable();
             $table->string('built_with')->nullable();
             $table->string('keywords')->nullable();

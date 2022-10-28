@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Media;
+use App\Models\Attachment;
 
 trait HasAssets
 {
@@ -21,6 +22,6 @@ trait HasAssets
      */
     public function assets()
     {
-        return $this->morphToMany(Media::class, 'attachments');
+        return $this->morphToMany(Media::class, 'attachments')->using(Attachment::class);
     }
 }

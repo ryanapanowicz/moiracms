@@ -20,6 +20,8 @@ export const ProjectQuery = gql`
             built_with
             keywords
             description
+            start
+            end
             assets {
                 id
                 name

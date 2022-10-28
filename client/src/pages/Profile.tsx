@@ -15,7 +15,7 @@ const Profile: React.FC = () => {
     const [toggle, setToggle] = useState(false);
     const [form] = Form.useForm();
 
-    const [updateProfile, { error }] = useUpdateProfileMutation();
+    const [updateProfile, { error: updateError }] = useUpdateProfileMutation();
 
     useEffect(() => {
         if (user) {
@@ -29,7 +29,7 @@ const Profile: React.FC = () => {
             setUserData(null);
         }
     }, [user]);
-    
+
     const handleFinish = (values: any) => {
         if (!submitting && user) {
             setSubmitting(true);
@@ -64,7 +64,7 @@ const Profile: React.FC = () => {
                     // Redirect success message on complete
                     if (data?.updateUser.user) {
                         // Reset form password values
-                        form.resetFields(['password', 'password_confirmation']);
+                        form.resetFields(["password", "password_confirmation"]);
                         setToggle(false);
 
                         notify.success({
@@ -109,9 +109,9 @@ const Profile: React.FC = () => {
                     </Layout.Header>
                 </Affix>
                 <Layout.Content className="page-content">
-                    {error && (
+                    {updateError && (
                         <Alert
-                            message={formatError(error)}
+                            message={formatError(updateError)}
                             type="error"
                             style={{ marginBottom: "24px" }}
                         />

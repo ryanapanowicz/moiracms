@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Traits\HasAssets;
-use App\Traits\HasUuid;
 use Facades\Str;
+use App\Traits\HasUuid;
+use App\Traits\HasAssets;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,6 +22,8 @@ class Project extends Model
     protected $casts = [
         'keywords' => 'array',
         'built_with' => 'array',
+        'start' => 'datetime',
+        'end' => 'datetime',
     ];
 
     /**
@@ -37,6 +39,8 @@ class Project extends Model
         'description',
         'link',
         'built_with',
+        'start',
+        'end',
     ];
 
     public static function boot()

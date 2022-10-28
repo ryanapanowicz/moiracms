@@ -29,6 +29,8 @@ export const UpdateProjectMutation = gql`
         $built_with: [String]
         $keywords: [String]
         $description: String
+        $start: Date
+        $end: Date
         $assets: [ID]
     ) {
         updateProject(
@@ -41,6 +43,8 @@ export const UpdateProjectMutation = gql`
                 built_with: $built_with
                 keywords: $keywords
                 description: $description
+                start: $start
+                end: $end
                 assets: $assets
             }
         ) {
@@ -53,6 +57,8 @@ export const UpdateProjectMutation = gql`
                 built_with
                 keywords
                 description
+                start
+                end
                 assets {
                     id
                     name

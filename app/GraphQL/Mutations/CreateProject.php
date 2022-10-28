@@ -2,10 +2,10 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Models\Project;
 use Exception;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Project;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class CreateProject
 {
@@ -26,7 +26,17 @@ class CreateProject
             $project->save();
 
             if (isset($args["assets"]) and is_array($args["assets"])) {
-                $project->assets()->sync($args["assets"]);
+                // Add order_id using sorted index of assets
+                $assets = array_map(function ($value, $index) {
+                    return ['media_id' => $value, 'order_id' => $index];
+                }, array_values($args["assets"]), array_keys($args["assets"]));
+
+                // To keep the SQL calls short, just detach
+                // everything and then reattach the new assets.
+                // This is not the best solution, but keeps things
+                // simple for now.
+                $project->assets()->detach();
+                $project->assets()->attach($assets);
             }
 
             DB::commit();

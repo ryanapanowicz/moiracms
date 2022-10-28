@@ -1,4 +1,4 @@
-import { Col, Form, FormInstance, Input, Row, Select } from "antd";
+import { Col, DatePicker, Form, FormInstance, Input, Row, Select } from "antd";
 import React from "react";
 import { AssetInput, ContentEditor } from ".";
 
@@ -65,6 +65,13 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
                 <Col span={24}>
                     <Form.Item name="assets">
                         <AssetInput />
+                    </Form.Item>
+                </Col>
+            </Row>
+            <Row gutter={24}>
+                <Col span={24}>
+                    <Form.Item name="project_time" label="Project Timeline">
+                        <DatePicker.RangePicker />
                     </Form.Item>
                 </Col>
             </Row>

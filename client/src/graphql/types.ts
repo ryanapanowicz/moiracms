@@ -45,11 +45,13 @@ export type Project = {
     built_with: [string];
     keywords: [string];
     description: string;
-    assets: [Media]
+    start: string;
+    end: string;
+    assets: [Media];
     user: User;
     created_at: string;
     updated_at: string;
-}
+};
 
 export type Role = {
     __typename?: "Role";
@@ -88,10 +90,10 @@ export type Media = {
 };
 
 export type AssetInfoInput = {
-    name?: string
-    alternative_text?: string
-    caption?: string
-}
+    name?: string;
+    alternative_text?: string;
+    caption?: string;
+};
 
 export type ResposiveImage = {
     urls: [string];

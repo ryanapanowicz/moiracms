@@ -1,11 +1,12 @@
-import { Col, Form, FormInstance, Input, Row, Select } from "antd";
-import React from "react";
+import { Col, DatePicker, Form, FormInstance, Input, Row, Select } from "antd";
+import { Store } from "antd/lib/form/interface";
+import moment from "moment";
+import React, { useMemo } from "react";
 import { AssetInput, ContentEditor } from ".";
-
 export interface UpdateProjectFormProps {
     form?: FormInstance<any>;
     onFinish?: (values: any) => void;
-    initialValues?: Record<string, any> | undefined;
+    initialValues?: Store;
 }
 
 const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
@@ -13,6 +14,12 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
     onFinish,
     initialValues,
 }) => {
+    const [start, end] = useMemo(() => {
+        const startDate = initialValues?.start && moment(initialValues.start);
+        const endDate = initialValues?.end && moment(initialValues.end);
+        return [startDate, endDate];
+    }, [initialValues]);
+
     return (
         <Form
             form={form}
@@ -21,7 +28,7 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
             onFinish={onFinish}
             layout="vertical"
             requiredMark="optional"
-            initialValues={initialValues}
+            initialValues={{ ...initialValues, project_time: [start, end] }}
         >
             <Row>
                 <Col>
@@ -98,6 +105,13 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
                 <Col span={24}>
                     <Form.Item name="assets">
                         <AssetInput />
+                    </Form.Item>
+                </Col>
+            </Row>
+            <Row gutter={24}>
+                <Col span={24}>
+                    <Form.Item name="project_time" label="Project Timeline">
+                        <DatePicker.RangePicker />
                     </Form.Item>
                 </Col>
             </Row>

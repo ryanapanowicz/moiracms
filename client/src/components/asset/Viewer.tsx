@@ -17,7 +17,10 @@ export interface ViewerProps {
 const defaultSortOrder = sortOrderData[0];
 const defaultVariables = { first: 24, order_by: [defaultSortOrder.order] };
 
-const Viewer: React.FC<ViewerProps> = ({ maxSelection, onSubmit }) => {
+const Viewer: React.FC<ViewerProps> = ({
+    maxSelection,
+    onSubmit,
+}) => {
     const { getVariables, setVariables } = useContext(PaginatorContext);
     const { showModal } = useContext(AssetModalContext);
     const ability = useAbility(AbilityContext);
@@ -113,7 +116,7 @@ const Viewer: React.FC<ViewerProps> = ({ maxSelection, onSubmit }) => {
             if (maxSelection && selected.length >= maxSelection) {
                 return;
             }
-            
+
             setSelected([...selected, file]);
         }
     };

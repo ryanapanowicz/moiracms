@@ -2,8 +2,8 @@
 
 namespace App\GraphQL\Validators;
 
-use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Request;
 use Nuwave\Lighthouse\Validation\Validator;
 
 class UpdateUserInputValidator extends Validator
@@ -24,7 +24,7 @@ class UpdateUserInputValidator extends Validator
             ],
             'password' => ['confirmed', 'min:8'],
             'password_confirmation' => ['min:8'],
-            'avatar' => ['string'],
+            'avatar' => ['string', 'nullable'],
         ];
     }
 

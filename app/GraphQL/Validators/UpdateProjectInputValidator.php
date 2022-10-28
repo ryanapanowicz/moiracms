@@ -2,8 +2,8 @@
 
 namespace App\GraphQL\Validators;
 
-use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Request;
 use Nuwave\Lighthouse\Validation\Validator;
 
 class UpdateProjectInputValidator extends Validator
@@ -23,6 +23,8 @@ class UpdateProjectInputValidator extends Validator
                 Rule::unique('projects', 'slug')->ignore($projectId, 'id'),
             ],
             'link' => ['url'],
+            'start' => ['before:end', 'nullable'],
+            'end' => ['after:start', 'nullable'],
         ];
     }
 
