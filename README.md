@@ -3,7 +3,7 @@
 <p align="center">
     <a href="https://laravel.com/"><img src="https://img.shields.io/badge/laravel-9.19-blue" alt="laravel 9.19"></a>
     <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/react-18.2.0-blue" alt="react 18.2.0"></a>
-    <a href="https://ant.design/"><img src="https://img.shields.io/badge/antd-4.21.7-blue" alt="antd 4.21.7"></a>
+    <a href="https://ant.design/"><img src="https://img.shields.io/badge/antd-4.23.6-blue" alt="antd 4.23.6"></a>
 </p>
 
 ## About Moira CMS
