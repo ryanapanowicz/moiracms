@@ -23,9 +23,11 @@ export const UpdateProjectMutation = gql`
     mutation updateProject(
         $id: ID!
         $title: String!
+        $subtitle: String!
         $slug: String!
         $content: String!
         $link: String
+        $work_done: String
         $built_with: [String]
         $keywords: [String]
         $description: String
@@ -37,9 +39,11 @@ export const UpdateProjectMutation = gql`
             id: $id
             input: {
                 title: $title
+                subtitle: $subtitle
                 slug: $slug
                 content: $content
                 link: $link
+                work_done: $work_done
                 built_with: $built_with
                 keywords: $keywords
                 description: $description
@@ -51,9 +55,11 @@ export const UpdateProjectMutation = gql`
             project {
                 id
                 title
+                subtitle
                 slug
                 content
                 link
+                work_done
                 built_with
                 keywords
                 description

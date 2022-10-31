@@ -17,11 +17,13 @@ class CreateProjectsTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id');
             $table->string('title');
+            $table->string('subtitle');
             $table->string('slug')->unique();
             $table->longText('content');
             $table->date('start')->nullable();
             $table->date('end')->nullable();
             $table->string('link')->nullable();
+            $table->string('work_done')->nullable();
             $table->string('built_with')->nullable();
             $table->string('keywords')->nullable();
             $table->string('description')->nullable();

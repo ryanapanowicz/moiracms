@@ -39,9 +39,11 @@ export type Project = {
     __typename?: "Project";
     id: string;
     title: string;
+    subtitle: string;
     slug: string;
     content: string;
     link: string;
+    work_done: string;
     built_with: [string];
     keywords: [string];
     description: string;

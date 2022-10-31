@@ -33,11 +33,13 @@ class Project extends Model
      */
     protected $fillable = [
         'title',
+        'subtitle',
         'slug',
         'content',
         'keywords',
         'description',
         'link',
+        'work_done',
         'built_with',
         'start',
         'end',

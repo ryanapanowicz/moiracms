@@ -58,6 +58,22 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
             <Row gutter={24}>
                 <Col span={24}>
                     <Form.Item
+                        name="subtitle"
+                        label="Subtitle"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Subtitle is required.",
+                            },
+                        ]}
+                    >
+                        <Input placeholder="e.g. Website / Design & Develop" />
+                    </Form.Item>
+                </Col>
+            </Row>
+            <Row gutter={24}>
+                <Col span={24}>
+                    <Form.Item
                         name="slug"
                         label="Slug"
                         rules={[
@@ -117,17 +133,8 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
             </Row>
             <Row gutter={24}>
                 <Col span={24}>
-                    <Form.Item
-                        name="link"
-                        label="External Link"
-                        rules={[
-                            {
-                                type: "url",
-                                message: "This field must be a valid url.",
-                            },
-                        ]}
-                    >
-                        <Input placeholder="e.g. https://moiracms.io/projects/project-1" />
+                    <Form.Item name="work_done" label="Work Done">
+                        <Input placeholder="e.g. Design, Develop, and Maintain" />
                     </Form.Item>
                 </Col>
             </Row>
@@ -139,6 +146,22 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
                             tokenSeparators={[","]}
                             placeholder="e.g. Javascript, React, PHP"
                         />
+                    </Form.Item>
+                </Col>
+            </Row>
+            <Row gutter={24}>
+                <Col span={24}>
+                    <Form.Item
+                        name="link"
+                        label="External Link"
+                        rules={[
+                            {
+                                type: "url",
+                                message: "This field must be a valid url.",
+                            },
+                        ]}
+                    >
+                        <Input placeholder="e.g. https://moiracms.io/projects/project-1" />
                     </Form.Item>
                 </Col>
             </Row>
@@ -156,7 +179,7 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
             <Row gutter={24}>
                 <Col span={24}>
                     <Form.Item name="description" label="Description">
-                        <Input placeholder="e.g. Project description" />
+                        <Input placeholder="e.g. A simple project description" />
                     </Form.Item>
                 </Col>
             </Row>

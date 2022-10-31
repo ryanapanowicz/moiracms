@@ -18,6 +18,7 @@ class UpdateProjectInputValidator extends Validator
         $projectId = Request::instance()->input('variables.id');
         return [
             'title' => ['string'],
+            'subtitle' => ['string'],
             'slug' => [
                 'alpha_dash',
                 Rule::unique('projects', 'slug')->ignore($projectId, 'id'),
@@ -25,6 +26,8 @@ class UpdateProjectInputValidator extends Validator
             'link' => ['url'],
             'start' => ['before:end', 'nullable'],
             'end' => ['after:start', 'nullable'],
+            'work_done' => ['string', 'nullable'],
+            'description' => ['string', 'nullable'],
         ];
     }
 

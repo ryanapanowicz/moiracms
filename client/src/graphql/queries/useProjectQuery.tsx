@@ -14,9 +14,11 @@ export const ProjectQuery = gql`
         project(id: $id) {
             id
             title
+            subtitle
             slug
             content
             link
+            work_done
             built_with
             keywords
             description

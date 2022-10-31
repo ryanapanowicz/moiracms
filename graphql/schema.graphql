@@ -28,9 +28,11 @@ input OrderByClause {
 type Project {
     id: ID!
     title: String!
+    subtitle: String!
     slug: String!
     content: String
     link: String
+    work_done: String
     built_with: [String]
     keywords: [String]
     description: String
@@ -44,11 +46,13 @@ type Project {
 
 input CreateProjectInput {
     title: String! @rules(apply: ["string"])
+    subtitle: String! @rules(apply: ["string"])
     content: String!
     link: String @rules(apply: ["url"])
+    work_done: String @rules(apply: ["string", "nullable"])
     built_with: [String]
     keywords: [String]
-    description: String
+    description: String @rules(apply: ["string", "nullable"])
     start: Date @rules(apply: ["before:end", "nullable"])
     end: Date @rules(apply: ["after:start", "nullable"])
     assets: [ID]
@@ -56,9 +60,11 @@ input CreateProjectInput {
 
 input UpdateProjectInput @validator {
     title: String!
+    subtitle: String!
     slug: String!
     content: String!
     link: String
+    work_done: String
     built_with: [String]
     keywords: [String]
     description: String

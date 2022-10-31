@@ -21,8 +21,10 @@ export type CreateProjectInput = {
 export const CreateProjectMutation = gql`
     mutation createProject(
         $title: String!
+        $subtitle: String!
         $content: String!
         $link: String
+        $work_done: String
         $built_with: [String]
         $keywords: [String]
         $description: String
@@ -33,8 +35,10 @@ export const CreateProjectMutation = gql`
         createProject(
             input: {
                 title: $title
+                subtitle: $subtitle
                 content: $content
                 link: $link
+                work_done: $work_done
                 built_with: $built_with
                 keywords: $keywords
                 description: $description
@@ -46,9 +50,11 @@ export const CreateProjectMutation = gql`
             project {
                 id
                 title
+                subtitle
                 slug
                 content
                 link
+                work_done
                 built_with
                 keywords
                 description

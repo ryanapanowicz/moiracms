@@ -25,9 +25,11 @@ export const ProjectsQuery = gql`
             data {
                 id
                 title
+                subtitle
                 slug
                 content
                 link
+                work_done
                 built_with
                 keywords
                 description
