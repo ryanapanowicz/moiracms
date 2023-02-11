@@ -1,9 +1,10 @@
-import { Affix, Breadcrumb, Button, Col, Layout, Row } from "antd";
+import { Breadcrumb, Button, Col, Row } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { CreateRole } from ".";
-import { RolesList } from "../components";
+import { PageLayout, RolesList } from "../components";
 import { useRolesQuery } from "../graphql";
-import { Can, notify, PaginatorContext } from "../services";
+import { useNotify } from "../hooks";
+import { Can, PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
 const Roles: React.FC = () => {
@@ -14,6 +15,7 @@ const Roles: React.FC = () => {
         pageSize: 10,
         total: 0,
     });
+    const notify = useNotify();
 
     const { data, loading, error, fetchMore } = useRolesQuery({
         variables: getVariables("roles"),
@@ -63,9 +65,9 @@ const Roles: React.FC = () => {
     }, [error]);
 
     return (
-        <Layout className="page">
-            <Affix className="header-affix">
-                <Layout.Header className="page-header">
+        <PageLayout
+            header={
+                <>
                     <Breadcrumb className="page-title">
                         <Breadcrumb.Item key="settings">
                             Settings
@@ -81,29 +83,26 @@ const Roles: React.FC = () => {
                             </Button>
                         </div>
                     </Can>
-                </Layout.Header>
-            </Affix>
-            <Layout.Content className="page-content">
-                <Row>
-                    <Col span={24}>
-                        <h2 className="form-title">Roles</h2>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={24}>
-                        <RolesList
-                            dataSource={data?.roles.data}
-                            loading={loading}
-                            pagination={{ hideOnSinglePage: true, ...paginate }}
-                            onChange={handleChange}
-                        />
-                    </Col>
-                </Row>
-                {visible && (
-                    <CreateRole visible={visible} onClose={hideModal} />
-                )}
-            </Layout.Content>
-        </Layout>
+                </>
+            }
+        >
+            <Row>
+                <Col span={24}>
+                    <h2 className="form-title">Roles</h2>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={24}>
+                    <RolesList
+                        dataSource={data?.roles.data}
+                        loading={loading}
+                        pagination={{ hideOnSinglePage: true, ...paginate }}
+                        onChange={handleChange}
+                    />
+                </Col>
+            </Row>
+            {visible && <CreateRole visible={visible} onClose={hideModal} />}
+        </PageLayout>
     );
 };
 

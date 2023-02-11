@@ -1,0 +1,319 @@
+
+.ant-form-item-has-error {
+    .ql-toolbar.ql-snow {
+        border-top-color: $error-color;
+        border-left-color: $error-color;
+        border-right-color: $error-color;
+    }
+
+    .ql-container.ql-snow {
+        border-color: $error-color;
+    }
+}
+
+.ql-container {
+    box-sizing: border-box;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 14px;
+    height: 100%;
+    margin: 0px;
+    position: relative;
+    background-color: $background-color;
+
+    &.ql-disabled {
+        .ql-tooltip {
+            visibility: hidden;
+        }
+
+        .ql-editor ul[data-checked] > li::before {
+            pointer-events: none;
+        }
+    }
+
+    &.ql-snow {
+        border-radius: 0 0 $border-radius-base $border-radius-base;
+        border: 1px solid $border-color-base;
+    }
+}
+
+.ql-clipboard {
+    left: -100000px;
+    height: 1px;
+    overflow-y: hidden;
+    position: absolute;
+    top: 50%;
+
+    p {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.ql-editor {
+    box-sizing: border-box;
+    line-height: 1.42;
+    height: 100%;
+    min-height: 200px;
+    outline: none;
+    overflow-y: auto;
+    padding: 12px 15px;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.ql-snow {
+    background-color: $background-color;
+
+    a {
+        color: $primary-color;
+    }
+
+    .ql-stroke {
+        stroke: $text-color;
+    }
+
+    &.ql-toolbar {
+        button {
+            &:active {
+                &:hover {
+                    outline: none;
+                }
+            }
+
+            &:hover {
+                color: $primary-color;
+
+                .ql-fill,
+                .ql-stroke.ql-fill {
+                    fill: $primary-color;
+                }
+
+                .ql-stroke,
+                .ql-stroke-miter {
+                    stroke: $primary-color;
+                }
+            }
+
+            &:focus {
+                color: $primary-color;
+
+                .ql-fill,
+                .ql-stroke.ql-fill {
+                    fill: $primary-color;
+                }
+
+                .ql-stroke,
+                .ql-stroke-miter {
+                    stroke: $primary-color;
+                }
+            }
+
+            &.ql-active {
+                color: $primary-color;
+
+                .ql-fill,
+                .ql-stroke.ql-fill {
+                    fill: $primary-color;
+                }
+
+                .ql-stroke,
+                .ql-stroke-miter {
+                    stroke: $primary-color;
+                }
+            }
+        }
+
+        svg {
+            position: relative;
+            float: left;
+            height: 100%;
+            width: 28px;
+        }
+
+        input.ql-image[type="file"] {
+            display: none;
+        }
+
+        .ql-picker-item {
+            width: 100%;
+
+            &:hover {
+                background-color: $select-item-active-bg;
+            }
+
+            &.ql-selected {
+                font-weight: bold;
+                background-color: $select-item-selected-bg;
+            }
+        }
+
+        .ql-picker-label {
+            &:hover {
+                color: $primary-color;
+
+                .ql-fill,
+                .ql-stroke.ql-fill {
+                    fill: $primary-color;
+                }
+
+                .ql-stroke,
+                .ql-stroke-miter {
+                    stroke: $primary-color;
+                }
+            }
+
+            &.ql-active {
+                color: $primary-color;
+
+                .ql-fill,
+                .ql-stroke.ql-fill {
+                    fill: $primary-color;
+                }
+
+                .ql-stroke,
+                .ql-stroke-miter {
+                    stroke: $primary-color;
+                }
+            }
+        }
+    }
+
+    .ql-editor blockquote {
+        border-left: 4px solid $border-color-base;
+        margin-bottom: 5px;
+        margin-top: 5px;
+        padding-left: 16px;
+    }
+
+    .ql-picker-options .ql-picker-item {
+        display: block;
+        clear: both;
+        margin: 0;
+        padding: 3px 10px;
+        color: $text-color;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: inherit;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .ql-picker.ql-expanded {
+        .ql-picker-label {
+            color: $primary-color;
+            border-color: transparent;
+            z-index: 2;
+
+            .ql-fill {
+                fill: $primary-color;
+            }
+
+            .ql-stroke {
+                stroke: $primary-color;
+            }
+        }
+
+        .ql-picker-options {
+            margin: 0;
+            padding: 4px 0;
+            outline: none;
+            display: block;
+            margin-top: -1px;
+            top: 100%;
+            z-index: 1;
+        }
+    }
+
+    .ql-tooltip {
+        background-color: #fff;
+        border: 1px solid $border-color-base;
+        box-shadow: $box-shadow-base;
+        color: #444;
+        padding: 5px 12px;
+        white-space: nowrap;
+
+        &::before {
+            content: "Visit URL:";
+            line-height: 26px;
+            margin-right: 8px;
+        }
+
+        input[type="text"] {
+            display: none;
+            border: 1px solid $border-color-base;
+            border-radius: $border-radius-base;
+            font-size: 13px;
+            height: 26px;
+            margin: 0px;
+            padding: 3px 5px;
+            width: 170px;
+            transition: all 0.3s $ease-in-out;
+
+            &:focus {
+                border: 1px solid $primary-color;
+                box-shadow: 0 0 0 2px rgba($primary-color, 20%);
+                outline: none;
+            }
+
+            &:focus-visible {
+                outline: none;
+            }
+        }
+
+        a {
+            line-height: 26px;
+
+            &.ql-preview {
+                display: inline-block;
+                max-width: 200px;
+                overflow-x: hidden;
+                text-overflow: ellipsis;
+                vertical-align: top;
+            }
+
+            &.ql-action::after {
+                border-right: 1px solid $border-color-base;
+                content: "Edit";
+                margin-left: 16px;
+                padding-right: 8px;
+            }
+
+            &.ql-remove::before {
+                content: "Remove";
+                margin-left: 8px;
+            }
+        }
+    }
+}
+
+.ql-toolbar {
+    &.ql-snow {
+        border-radius: $border-radius-base $border-radius-base 0 0;
+        border: 1px solid $border-color-base;
+        box-sizing: border-box;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+            Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+            "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+            "Noto Color Emoji";
+        padding: $padding-md;
+
+        .ql-picker-options {
+            color: $text-color;
+            border: none;
+            box-shadow: $box-shadow-base;
+            border-radius: $border-radius-base;
+        }
+
+        .ql-picker.ql-expanded {
+            .ql-picker-label {
+                border-color: transparent;
+            }
+        }
+    }
+}

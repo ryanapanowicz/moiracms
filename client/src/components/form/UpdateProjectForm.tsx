@@ -1,6 +1,6 @@
 import { Col, DatePicker, Form, FormInstance, Input, Row, Select } from "antd";
 import { Store } from "antd/lib/form/interface";
-import moment from "moment";
+import dayjs from "dayjs";
 import React, { useMemo } from "react";
 import { AssetInput, ContentEditor } from ".";
 export interface UpdateProjectFormProps {
@@ -15,8 +15,8 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
     initialValues,
 }) => {
     const [start, end] = useMemo(() => {
-        const startDate = initialValues?.start && moment(initialValues.start);
-        const endDate = initialValues?.end && moment(initialValues.end);
+        const startDate = initialValues?.start && dayjs(initialValues.start, "YYYY-MM-DD");
+        const endDate = initialValues?.end && dayjs(initialValues.end, "YYYY-MM-DD");
         return [startDate, endDate];
     }, [initialValues]);
 

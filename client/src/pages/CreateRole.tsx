@@ -3,7 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { CreateRoleForm } from "../components/form";
 import { useCreateRoleMutation } from "../graphql/mutations";
 import { RolesQuery } from "../graphql/queries/useRolesQuery";
-import { notify, PaginatorContext } from "../services";
+import { useNotify } from "../hooks";
+import { PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
 export interface CreateRoleProps {
@@ -19,6 +20,7 @@ const CreateRole: React.FC<CreateRoleProps> = ({
     const [submitting, setSubmitting] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [form] = Form.useForm();
+    const notify = useNotify();
 
     const [createRole, { error }] = useCreateRoleMutation();
 

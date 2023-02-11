@@ -1,12 +1,13 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Affix, Alert, Button, Layout, Space } from "antd";
+import { Alert, Button, Space } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ServerError } from ".";
-import { UpdateProjectForm } from "../components";
+import { PageLayout, UpdateProjectForm } from "../components";
 import { useProjectQuery, useUpdateProjectMutation } from "../graphql";
 import { ProjectsQuery } from "../graphql/queries/useProjectsQuery";
-import { Can, notify, PaginatorContext } from "../services";
+import { useNotify } from "../hooks";
+import { Can, PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
 const UpdateProject: React.FC = () => {
@@ -14,6 +15,7 @@ const UpdateProject: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [projectData, setProjectData] = useState<any>();
     const { id } = useParams();
+    const notify = useNotify();
 
     const [updateProject, { error: updateError }] = useUpdateProjectMutation();
 
@@ -89,9 +91,9 @@ const UpdateProject: React.FC = () => {
     }
 
     return (
-        <Layout className="page">
-            <Affix className="header-affix">
-                <Layout.Header className="page-header">
+        <PageLayout
+            header={
+                <>
                     <Space className="page-title" size="middle">
                         <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
@@ -121,22 +123,21 @@ const UpdateProject: React.FC = () => {
                             </Button>
                         </div>
                     </Can>
-                </Layout.Header>
-            </Affix>
-            <Layout.Content className="page-content">
-                {updateError && (
-                    <Alert
-                        message={formatError(updateError)}
-                        type="error"
-                        style={{ marginBottom: "24px" }}
-                    />
-                )}
-                <UpdateProjectForm
-                    onFinish={handleFinish}
-                    initialValues={projectData}
+                </>
+            }
+        >
+            {updateError && (
+                <Alert
+                    message={formatError(updateError)}
+                    type="error"
+                    style={{ marginBottom: "24px" }}
                 />
-            </Layout.Content>
-        </Layout>
+            )}
+            <UpdateProjectForm
+                onFinish={handleFinish}
+                initialValues={projectData}
+            />
+        </PageLayout>
     );
 };
 

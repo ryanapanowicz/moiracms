@@ -11,18 +11,18 @@
 
 .asset-link {
     .ant-card-meta-title {
-        transition: color @animation-duration-base @ease-in-out;
+        transition: color $animation-duration-base $ease-in-out;
     }
 
     &:hover {
         .ant-card-meta-title {
-            color: @link-hover-color;
+            color: $link-hover-color;
         }
     }
 }
 
 .asset-list-header {
-    margin-bottom: @padding-lg;
+    margin-bottom: $padding-lg;
 }
 
 .asset-list-content {
@@ -40,32 +40,60 @@
         }
 
         & .ant-card-meta-title {
-            color: @link-hover-color;
+            color: $link-hover-color;
+        }
+    }
+
+    &:hover {
+        .ant-image-mask {
+            opacity: 1;
         }
     }
 
     .ant-image-mask {
-        border-radius: @border-radius-base;
+        position: absolute;
+        inset: 0;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s;
+        border-radius: $border-radius-base;
+
+        .ant-image-mask-info {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            padding: 0 4px;
+
+            .anticon {
+                margin-right: 4px;
+            }
+        }
     }
 
     .ant-card-cover {
         position: relative;
-        border-radius: @border-radius-base;
+        overflow: hidden;
+        border-radius: $border-radius-base;
 
         img {
-            border-radius: @border-radius-base;
-            transition: box-shadow 0.2s @ease-in-out;
+            border-radius: $border-radius-base;
+            transition: box-shadow 0.2s $ease-in-out;
         }
     }
 
     .ant-card-body {
-        padding: 12px 0;
+        padding: 12px 0 !important;
     }
 
     .ant-card-meta-detail {
         .ant-card-meta-title {
             font-size: 14px;
-            margin: 0;
+            margin: 0 !important;
         }
     }
 
@@ -84,9 +112,9 @@
         font-weight: normal;
         border-radius: 50%;
         opacity: 0;
-        background-color: @primary-color;
-        box-shadow: @btn-primary-shadow;
-        transition: all @animation-duration-base @ease-in-out-quint;
+        background-color: $primary-color;
+        box-shadow: $btn-primary-shadow;
+        transition: all $animation-duration-base $ease-in-out-quint;
     }
 
     &.asset-selected {
@@ -100,42 +128,44 @@
         }
 
         img {
-            box-shadow: 0 0 0 3px fadeout(@primary-color, 40%);
+            box-shadow: 0 0 0 3px fadeout($primary-color, 40%);
         }
     }
 }
 
-.asset-modal {
-    .ant-modal-body {
-        padding: 0;
-    }
+.ant-modal-root {
+    .asset-modal {
+        .ant-modal-body {
+            padding: 0;
+        }
 
-    .asset-modal-content {
-        padding: @padding-lg;
-    }
+        .asset-modal-content {
+            padding: $modal-body-padding;
 
-    .ant-list {
-        margin-bottom: -16px;
-    }
+            .ant-list {
+                margin-bottom: -16px;
+            }
 
-    .ant-list-pagination {
-        margin: 0;
-    }
+            .ant-list-pagination {
+                margin: 0;
+            }
 
-    .ant-pagination {
-        margin-bottom: 16px;
+            .ant-pagination {
+                margin-bottom: 16px;
+            }
+        }
     }
 }
 
 .asset-modal-view {
     .asset-modal-content {
-        padding: @padding-lg;
+        padding: $modal-body-padding;
     }
 }
 
 .asset-modal-edit {
     .asset-modal-content {
-        padding: @modal-body-padding;
+        padding: $modal-body-padding;
     }
 }
 
@@ -148,8 +178,8 @@
     height: 100%;
     min-height: 400px;
     max-height: 430px;
-    border-radius: @border-radius-base;
-    background-color: @image-frame-background;
+    border-radius: $border-radius-base;
+    background-color: $image-frame-background;
 
     img {
         height: auto;
@@ -168,14 +198,14 @@
     align-items: center;
     justify-content: center;
     .asset-item-icon {
-        color: @text-color-secondary;
+        color: $text-color-secondary;
     }
 }
 
 .asset-item-icon {
     width: 30%;
     height: 30%;
-    color: @text-color-secondary;
+    color: $text-color-secondary;
 
     svg {
         width: 100%;
@@ -185,15 +215,15 @@
 
 .asset-item-background {
     display: block;
-    background-color: @background-color-base;
+    background-color: $background-color-base;
 }
 
 .asset-info {
     position: relative;
-    padding: @padding-md;
-    background-color: @background-color-light;
-    border-radius: @border-radius-base;
-    margin-bottom: @padding-lg;
+    padding: $padding-md;
+    background-color: $background-color-light;
+    border-radius: $border-radius-base;
+    margin-bottom: $padding-lg;
 
     .asset-info-title {
         font-weight: 500;
@@ -201,7 +231,7 @@
     }
 
     .asset-info-description {
-        color: @text-color-secondary;
+        color: $text-color-secondary;
         margin: 0;
     }
 }
@@ -222,16 +252,16 @@
             .draggable-handle {
                 left: -10px;
                 top: -10px;
-                width: @btn-circle-size;
-                height: @btn-circle-size;
+                width: $btn-circle-size;
+                height: $btn-circle-size;
                 opacity: 1;
             }
 
             .asset-input-remove {
                 right: -10px;
                 top: -10px;
-                width: @btn-circle-size;
-                height: @btn-circle-size;
+                width: $btn-circle-size;
+                height: $btn-circle-size;
                 opacity: 1;
             }
         }
@@ -239,14 +269,14 @@
 }
 
 .asset-input-remove {
-    position: absolute;
+    position: absolute !important;
     opacity: 0;
     width: 0;
     min-width: 0;
     height: 0;
     right: 4px;
     top: 4px;
-    transition: all @animation-duration-base @ease-in-out-quint;
+    transition: all $animation-duration-base $ease-in-out-quint;
 }
 
 .modal-spin-container {
@@ -268,20 +298,20 @@
         height: 0;
         left: 4px;
         top: 4px;
-        transition: all @animation-duration-base @ease-in-out-quint;
+        transition: all $animation-duration-base $ease-in-out-quint;
     }
 
     &.is-dragging {
         position: relative;
         z-index: 100;
-    
+
         .asset-item {
             transform: scale(1.05);
             opacity: 0.85;
         }
-    
+
         .ant-card-cover {
-            box-shadow: @shadow-2;
+            box-shadow: $shadow-2;
         }
     }
 }

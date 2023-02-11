@@ -9,7 +9,7 @@ extend type Query {
     project(id: ID @eq, slug: String @eq): Project @find
 }
 
-extend type Mutation @guard(with: ["api"]) {
+extend type Mutation @guard {
     createProject(input: CreateProjectInput! @spread): CreateProjectPayload @hasAccess(permission: "create projects")
     updateProject(id: ID! @eq, input: UpdateProjectInput! @spread): UpdateProjectPayload @hasAccess(permission: "edit projects", owner: true, model: "Project")
     deleteProject(id: ID!): DeleteProjectPayload @hasAccess(permission: "delete projects")

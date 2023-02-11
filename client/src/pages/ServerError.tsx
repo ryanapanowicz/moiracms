@@ -5,7 +5,6 @@ import { ReactComponent as Error } from "../assets/svg/404-icon.svg";
 
 const ServerError: React.FC = () => {
     const navigate = useNavigate();
-
     return (
         <Layout className="page error-page">
             <Layout.Content>

@@ -6,7 +6,7 @@ extend type Query {
     asset(id: ID @eq): Media @find
 }
 
-extend type Mutation @guard(with: ["api"]) {
+extend type Mutation @guard {
     deleteAsset(id: ID!): DeleteAssetPayload @hasAccess(permission: "delete assets")
     upload(input: AssetUploadInput @spread): [Media]! @hasAccess(permission: "upload assets")
     updateAssetInfo(id: ID!, input: AssetInfoInput @spread): UpdateAssetPayload @hasAccess(permission: "edit assets")

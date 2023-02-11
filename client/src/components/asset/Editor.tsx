@@ -1,19 +1,20 @@
 import {
     ArrowLeftOutlined,
     DeleteOutlined,
-    FileOutlined,
+    FileOutlined
 } from "@ant-design/icons";
 import { FetchResult } from "@apollo/client";
 import { Button, Col, Form, Input, Popconfirm, Row, Space, Spin } from "antd";
 import copy from "copy-to-clipboard";
-import moment from "moment";
+import dayjs from "dayjs";
 import React, { useContext, useEffect, useState } from "react";
 import { useAssetLazyQuery, useUpdateAssetInfoMutation } from "../../graphql";
 import useDeleteAssetMutation, {
-    DeleteAssetType,
+    DeleteAssetType
 } from "../../graphql/mutations/useDeleteAssetMutation";
 import { UpdateAssetInfoType } from "../../graphql/mutations/useUpdateAssetInfoMutation";
-import { Can, notify, PaginatorContext } from "../../services";
+import { useNotify } from "../../hooks";
+import { Can, PaginatorContext } from "../../services";
 import { formatBytes, formatError } from "../../utils";
 
 export interface EditorProps {
@@ -48,12 +49,10 @@ const Editor: React.FC<EditorProps> = ({
     onDelete,
 }) => {
     const { setVariables } = useContext(PaginatorContext);
-
+    const notify = useNotify();
     const [assetQuery, { data, error: queryError }] = useAssetLazyQuery();
-
     const [updateAssetInfo, { error: updateError }] =
         useUpdateAssetInfoMutation();
-
     const [deleteAsset, { error: deleteError }] = useDeleteAssetMutation({
         update: (cache, { data }) => {
             cache.evict({
@@ -222,7 +221,7 @@ const Editor: React.FC<EditorProps> = ({
                                     <em className="asset-info-title">Date</em>
                                     <p className="asset-info-description">
                                         {data?.asset &&
-                                            moment(
+                                            dayjs(
                                                 data?.asset.created_at
                                             ).format("MMM Do, YYYY")}
                                     </p>

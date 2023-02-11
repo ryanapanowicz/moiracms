@@ -38,7 +38,7 @@ const Settings: React.FC = () => {
         <AdminLayout>
             <Layout className="page-layout">
                 {menu.find((item) => item.enabled) && (
-                    <Layout.Sider className="page-sider">
+                    <Layout.Sider className="page-sider" theme="light">
                         <div className="page-sider-title">
                             <h1>Settings</h1>
                         </div>

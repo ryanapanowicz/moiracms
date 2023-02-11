@@ -5,7 +5,7 @@ import { DeleteButton } from "..";
 import { useRevokePermissionToRoleMutation } from "../../graphql";
 import { MeQuery } from "../../graphql/queries/useMeQuery";
 import { Role } from "../../graphql/types";
-import { notify } from "../../services";
+import { useNotify } from "../../hooks";
 import { AbilityContext } from "../../services/Can";
 
 export interface RolePermissionsListProps {
@@ -21,6 +21,7 @@ const RolePermissionsList: React.FC<RolePermissionsListProps> = ({
 }) => {
     const ability = useAbility(AbilityContext);
     const canRevoke = ability.can("revoke", "permissions");
+    const notify = useNotify();
 
     const [revokePermissionToRole] = useRevokePermissionToRoleMutation({
         update: (cache, { data }) => {

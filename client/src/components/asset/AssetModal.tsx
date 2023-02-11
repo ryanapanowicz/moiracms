@@ -1,7 +1,7 @@
 import { Modal } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { AssetModalContext, Editor, Uploader, Viewer } from ".";
-import { notify } from "../../services";
+import { useNotify } from "../../hooks";
 
 export type AssetModalType = "view" | "upload" | "edit";
 
@@ -32,6 +32,7 @@ const AssetModal: React.FC<AssetModalProps> = ({
     const { showModal, hideModal } = useContext(AssetModalContext);
     const [isVisible, setIsVisible] = useState(visible);
     const [submitting, setSubmitting] = useState(false);
+    const notify = useNotify();
     const width = type === "view" ? 1200 : modalDefaultWidth;
 
     const showGallery =

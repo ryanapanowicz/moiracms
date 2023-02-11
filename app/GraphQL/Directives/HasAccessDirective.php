@@ -3,21 +3,19 @@
 namespace App\GraphQL\Directives;
 
 use Closure;
-use Illuminate\Contracts\Auth\Authenticatable;
-use App\Exceptions\AuthorizationException;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
+use App\Exceptions\AuthorizationException;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
-use Nuwave\Lighthouse\Support\Contracts\FieldMiddleware;
+use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Nuwave\Lighthouse\Support\Contracts\FieldMiddleware;
 
 class HasAccessDirective extends BaseDirective implements FieldMiddleware
 {
     public static function definition(): string
     {
-        return
-            /** @lang GraphQL */
-            <<<'GRAPHQL'
+        return /** @lang GraphQL */<<<'GRAPHQL'
 """
 Limit field access to users that have permission or role.
 """
@@ -56,20 +54,17 @@ directive @hasAccess(
 ) repeatable on FIELD_DEFINITION
 GRAPHQL;
     }
+
     protected $user;
 
     public function handleField(
         FieldValue $fieldValue,
         Closure $next
-    ): FieldValue {
+    ): FieldValue
+    {
         $previousResolver = $fieldValue->getResolver();
 
-        $fieldValue->setResolver(function (
-            $root,
-            array $args,
-            GraphQLContext $context,
-            ResolveInfo $resolveInfo
-        ) use ($previousResolver) {
+        $fieldValue->setResolver(function ($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo) use ($previousResolver) {
             $this->user = $context->user();
 
             // Handle Roles and Permissions checks for input types
@@ -87,7 +82,8 @@ GRAPHQL;
     protected function doAccessChecks(
         BaseDirective $directive,
         ResolveInfo $resolveInfo
-    ): void {
+    ): void
+    {
         $roles = $directive->directiveArgValue("role");
         $permissions = $directive->directiveArgValue("permission");
         $ownerAccess = $directive->directiveArgValue("owner", false);
@@ -117,9 +113,7 @@ GRAPHQL;
     protected function doArgAccessChecks(ResolveInfo $resolveInfo): void
     {
         foreach ($resolveInfo->argumentSet->arguments as $key => $argument) {
-            $filteredDirectives = $argument->directives->filter(function (
-                $object
-            ): bool {
+            $filteredDirectives = $argument->directives->filter(function ($object): bool {
                 return $object instanceof ArgAccessDirective;
             });
 
@@ -135,7 +129,8 @@ GRAPHQL;
         bool $isOwner,
         string $fieldName,
         ResolveInfo $resolveInfo
-    ): bool {
+    ): bool
+    {
         if (!$isOwner) {
             return false;
         }

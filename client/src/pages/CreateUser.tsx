@@ -1,17 +1,19 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Affix, Alert, Button, Layout, Space } from "antd";
+import { Alert, Button, Space } from "antd";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CreateUserForm } from "../components";
+import { CreateUserForm, PageLayout } from "../components";
 import { useCreateUserMutation } from "../graphql";
 import { UsersQuery } from "../graphql/queries/useUsersQuery";
-import { notify, PaginatorContext } from "../services";
+import { useNotify } from "../hooks";
+import { PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
 const CreateUser: React.FC = () => {
     const { getVariables } = useContext(PaginatorContext);
     const [submitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
+    const notify = useNotify();
 
     const [createUser, { error }] = useCreateUserMutation();
 
@@ -45,9 +47,9 @@ const CreateUser: React.FC = () => {
     };
 
     return (
-        <Layout className="page">
-            <Affix className="header-affix">
-                <Layout.Header className="page-header">
+        <PageLayout
+            header={
+                <>
                     <Space className="page-title" size="middle">
                         <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
@@ -73,19 +75,18 @@ const CreateUser: React.FC = () => {
                             Save
                         </Button>
                     </div>
-                </Layout.Header>
-            </Affix>
-            <Layout.Content className="page-content">
-                {error && (
-                    <Alert
-                        message={formatError(error)}
-                        type="error"
-                        style={{ marginBottom: "24px" }}
-                    />
-                )}
-                <CreateUserForm onFinish={handleFinish} />
-            </Layout.Content>
-        </Layout>
+                </>
+            }
+        >
+            {error && (
+                <Alert
+                    message={formatError(error)}
+                    type="error"
+                    style={{ marginBottom: "24px" }}
+                />
+            )}
+            <CreateUserForm onFinish={handleFinish} />
+        </PageLayout>
     );
 };
 

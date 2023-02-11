@@ -12,8 +12,8 @@ const Content: React.FC = () => {
 
     return (
         <AdminLayout>
-            <Layout className="page-layout">
-                <Layout.Sider className="page-sider">
+            <Layout className="page-layout" style={{ width: "1900px" }}>
+                <Layout.Sider className="page-sider" width={200} theme="light">
                     <div className="page-sider-title">
                         <h1>Content</h1>
                     </div>
@@ -33,7 +33,10 @@ const Content: React.FC = () => {
                         path="projects/create"
                         element={
                             <RequireAuth
-                                can={{ action: "create", subject: "projects" }}
+                                can={{
+                                    action: "create",
+                                    subject: "projects",
+                                }}
                                 redirectTo="/login"
                             >
                                 <CreateProject />

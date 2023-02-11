@@ -1,39 +1,15 @@
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAbility } from "@casl/react";
-import { Avatar, Dropdown, Menu } from "antd";
+import { Avatar, Dropdown } from "antd";
 import React, { useContext, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as Assets } from "../../assets/svg/assets-icon.svg";
 import { ReactComponent as Content } from "../../assets/svg/content-icon.svg";
 import { ReactComponent as Logo } from "../../assets/svg/moira-logo.svg";
 import { ReactComponent as Settings } from "../../assets/svg/settings-icon.svg";
-import { MeType } from "../../graphql/queries/useMeQuery";
 import { UserContext } from "../../services";
 import { AbilityContext } from "../../services/Can";
 import { getInitials } from "../../utils";
-
-const userMenu = (user?: MeType, onLogout?: () => void) => (
-    <Menu
-        className="user-menu"
-        style={{ width: "140px" }}
-        items={[
-            {
-                key: "profile",
-                label: <Link to="/profile">Profile</Link>,
-            },
-            {
-                key: "logout",
-                danger: true,
-                label: (
-                    <>
-                        Logout <LogoutOutlined />
-                    </>
-                ),
-                onClick: onLogout,
-            },
-        ]}
-    />
-);
 
 const Sidebar: React.FC = () => {
     const { user, logout } = useContext(UserContext);
@@ -62,6 +38,23 @@ const Sidebar: React.FC = () => {
     const getClassName = (pathname: string) => {
         return `menu-item ${locationKey === pathname && "menu-item-selected"}`;
     };
+
+    const userMenuItems = [
+        {
+            key: "profile",
+            label: <Link to="/profile">Profile</Link>,
+        },
+        {
+            key: "logout",
+            danger: true,
+            label: (
+                <>
+                    Logout <LogoutOutlined />
+                </>
+            ),
+            onClick: logout,
+        },
+    ];
 
     return (
         <aside className="main-navbar">
@@ -107,7 +100,10 @@ const Sidebar: React.FC = () => {
             </div>
             <div className="navbar-footer">
                 <Dropdown
-                    overlay={userMenu(user, logout)}
+                    menu={{
+                        items: userMenuItems,
+                        style: { width: "140px" },
+                    }}
                     placement="topRight"
                     trigger={["click"]}
                 >

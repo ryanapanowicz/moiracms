@@ -1,5 +1,5 @@
 import { FileOutlined } from "@ant-design/icons";
-import { Card } from "antd";
+import { Card, ConfigProvider } from "antd";
 import React from "react";
 import { Media } from "../../graphql/types";
 import { formatBytes } from "../../utils";
@@ -18,44 +18,55 @@ const FilePreview: React.FC<FilePreviewProps> = ({
     overlayTitle,
 }) => {
     return (
-        <Card
-            className={["asset-item", className].join(" ").trim()}
-            size="small"
-            bordered={false}
-            cover={
-                <>
-                    {file.type === "image" ? (
-                        <img
-                            src={file.preview}
-                            alt={file.alternative_text}
-                            draggable="false"
-                        />
-                    ) : (
-                        <>
-                            <svg
-                                className="asset-item-background"
-                                viewBox="0 0 4 3"
-                            />
-                            <div className="asset-item-preview">
-                                <FileOutlined className="asset-item-icon" />
-                            </div>
-                        </>
-                    )}
-                    {overlay && (
-                        <div className="ant-image-mask">
-                            <div className="ant-image-mask-info">
-                                {overlayTitle}
-                            </div>
-                        </div>
-                    )}
-                </>
-            }
+        <ConfigProvider
+            theme={{
+                components: {
+                    Card: {
+                        boxShadowTertiary: "",
+                        fontWeightStrong: 500,
+                    },
+                },
+            }}
         >
-            <Card.Meta
-                title={file.file_name}
-                description={formatBytes(file.size)}
-            />
-        </Card>
+            <Card
+                className={["asset-item", className].join(" ").trim()}
+                size="small"
+                bordered={false}
+                cover={
+                    <>
+                        {file.type === "image" ? (
+                            <img
+                                src={file.preview}
+                                alt={file.alternative_text}
+                                draggable="false"
+                            />
+                        ) : (
+                            <>
+                                <svg
+                                    className="asset-item-background"
+                                    viewBox="0 0 4 3"
+                                />
+                                <div className="asset-item-preview">
+                                    <FileOutlined className="asset-item-icon" />
+                                </div>
+                            </>
+                        )}
+                        {overlay && (
+                            <div className="ant-image-mask">
+                                <div className="ant-image-mask-info">
+                                    {overlayTitle}
+                                </div>
+                            </div>
+                        )}
+                    </>
+                }
+            >
+                <Card.Meta
+                    title={file.file_name}
+                    description={formatBytes(file.size)}
+                />
+            </Card>
+        </ConfigProvider>
     );
 };
 

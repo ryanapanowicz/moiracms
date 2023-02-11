@@ -1,12 +1,13 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useAbility } from "@casl/react";
-import { Affix, Button, Col, ConfigProvider, Layout, Row, Space } from "antd";
+import { Button, Col, ConfigProvider, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ServerError } from ".";
-import { RenderEmpty, RolePermissionsList } from "../components";
+import { PageLayout, RenderEmpty, RolePermissionsList } from "../components";
 import { useRoleQuery } from "../graphql";
-import { Can, notify } from "../services";
+import { useNotify } from "../hooks";
+import { Can } from "../services";
 import { AbilityContext } from "../services/Can";
 import { formatError } from "../utils";
 import AssignPermission from "./AssignPermission";
@@ -21,6 +22,7 @@ const UpdateRole: React.FC = () => {
     const [visible, setVisible] = useState(false);
     const ability = useAbility(AbilityContext);
     const { id } = useParams();
+    const notify = useNotify();
 
     const { data, loading, error } = useRoleQuery({
         variables: id ? { id: id } : undefined,
@@ -54,9 +56,9 @@ const UpdateRole: React.FC = () => {
     }
 
     return (
-        <Layout className="page">
-            <Affix className="header-affix">
-                <Layout.Header className="page-header">
+        <PageLayout
+            header={
+                <>
                     <Space className="page-title" size="middle">
                         <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
@@ -70,46 +72,45 @@ const UpdateRole: React.FC = () => {
                             </Button>
                         </div>
                     </Can>
-                </Layout.Header>
-            </Affix>
-            <Layout.Content className="page-content">
-                <Row>
-                    <Col span={24}>
-                        <h2 className="form-title">Role Permissions</h2>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={24}>
-                        <ConfigProvider
-                            renderEmpty={() =>
-                                ability.can("assign", "permissions") ? (
-                                    <RenderEmpty
-                                        content="No permissions assigned"
-                                        btnText="Assign Permission"
-                                        onClick={showModal}
-                                    />
-                                ) : (
-                                    <RenderEmpty content="No permissions assigned" />
-                                )
-                            }
-                        >
-                            <RolePermissionsList
-                                role={data?.role}
-                                dataSource={data?.role.permissions}
-                                loading={loading}
-                            />
-                        </ConfigProvider>
-                    </Col>
-                </Row>
-                {visible && (
-                    <AssignPermission
-                        role={data?.role}
-                        visible={visible}
-                        onClose={hideModal}
-                    />
-                )}
-            </Layout.Content>
-        </Layout>
+                </>
+            }
+        >
+            <Row>
+                <Col span={24}>
+                    <h2 className="form-title">Role Permissions</h2>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={24}>
+                    <ConfigProvider
+                        renderEmpty={() =>
+                            ability.can("assign", "permissions") ? (
+                                <RenderEmpty
+                                    content="No permissions assigned"
+                                    btnText="Assign Permission"
+                                    onClick={showModal}
+                                />
+                            ) : (
+                                <RenderEmpty content="No permissions assigned" />
+                            )
+                        }
+                    >
+                        <RolePermissionsList
+                            role={data?.role}
+                            dataSource={data?.role.permissions}
+                            loading={loading}
+                        />
+                    </ConfigProvider>
+                </Col>
+            </Row>
+            {visible && (
+                <AssignPermission
+                    role={data?.role}
+                    visible={visible}
+                    onClose={hideModal}
+                />
+            )}
+        </PageLayout>
     );
 };
 

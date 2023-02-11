@@ -1,4 +1,4 @@
-import { Menu, MenuProps } from "antd";
+import { Dropdown, MenuProps } from "antd";
 import React from "react";
 import { OrderByClause, SortOrder } from "../../graphql/types";
 
@@ -41,13 +41,31 @@ export const sortOrderData: sortOrderType[] = [
     },
 ];
 
-const SortOrderMenu: React.FC<MenuProps> = (props) => {
-    const menuProps = {
-        items: sortOrderData.map(({ key, label }) => ({ key, label })),
-        ...props,
-    };
+export type SortOrderMenuProps = Pick<
+    MenuProps,
+    "onSelect" | "defaultSelectedKeys" | "children"
+>;
 
-    return <Menu {...menuProps} />;
+const SortOrderMenu: React.FC<SortOrderMenuProps> = ({
+    children,
+    onSelect,
+    defaultSelectedKeys,
+}) => {
+    const items = sortOrderData.map(({ key, label }) => ({ key, label }));
+
+    return (
+        <Dropdown
+            menu={{
+                items: items,
+                selectable: true,
+                onSelect: onSelect,
+                defaultSelectedKeys: defaultSelectedKeys,
+            }}
+            trigger={["click"]}
+        >
+            {children}
+        </Dropdown>
+    );
 };
 
 export default SortOrderMenu;

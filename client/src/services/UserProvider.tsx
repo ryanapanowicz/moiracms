@@ -3,7 +3,9 @@ import { useAbility } from "@casl/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth, UserContext } from ".";
+import { AuthLayout } from "../components";
 import { useLogoutMutation, useMeLazyQuery } from "../graphql";
+import { ServerError } from "../pages";
 import { AbilityContext } from "./Can";
 import updateAbility from "./updateAbility";
 
@@ -20,7 +22,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     // is fetched and permissions are set
     const [ready, setReady] = useState(false);
 
-    const [me, { data }] = useMeLazyQuery({
+    const [me, { data, error }] = useMeLazyQuery({
         onCompleted: ({ me }) => {
             updateAbility(ability, me.roles);
             setReady(true);
@@ -42,6 +44,18 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    if (error) {
+        return (
+            <>
+                {error && (
+                    <AuthLayout>
+                        <ServerError />
+                    </AuthLayout>
+                )}
+            </>
+        );
+    }
 
     return (
         <UserContext.Provider value={{ user: data, query: me, logout: logout }}>

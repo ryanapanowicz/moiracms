@@ -1,9 +1,7 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Modal } from "antd";
+import { Button } from "antd";
 import React from "react";
-import { notify } from "../../services";
-
-const { confirm } = Modal;
+import { useModal, useNotify } from "../../hooks";
 
 export interface DeleteButtonProps {
     title?: string;
@@ -22,10 +20,13 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
     onClose,
     width,
 }) => {
+    const modal = useModal();
+    const notify = useNotify();
+
     const onClick: React.MouseEventHandler<HTMLElement> = (e) => {
-        confirm({
+        modal.confirm({
             title: title,
-            icon: "",
+            icon: <></>,
             content: content,
             okText: cancelText,
             cancelText: okText,

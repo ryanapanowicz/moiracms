@@ -1,6 +1,6 @@
 import { DownOutlined } from "@ant-design/icons";
 import { useAbility } from "@casl/react";
-import { Button, Col, Dropdown, Row, Space } from "antd";
+import { Button, Col, Row, Space } from "antd";
 import type { SelectEventHandler } from "rc-menu/lib/interface";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { AssetList, AssetModalContext, SortOrderMenu } from "..";
@@ -17,10 +17,7 @@ export interface ViewerProps {
 const defaultSortOrder = sortOrderData[0];
 const defaultVariables = { first: 24, order_by: [defaultSortOrder.order] };
 
-const Viewer: React.FC<ViewerProps> = ({
-    maxSelection,
-    onSubmit,
-}) => {
+const Viewer: React.FC<ViewerProps> = ({ maxSelection, onSubmit }) => {
     const { getVariables, setVariables } = useContext(PaginatorContext);
     const { showModal } = useContext(AssetModalContext);
     const ability = useAbility(AbilityContext);
@@ -130,21 +127,15 @@ const Viewer: React.FC<ViewerProps> = ({
                 <div className="asset-list-header">
                     <Row justify="space-between">
                         <Col>
-                            <Dropdown
-                                overlay={
-                                    <SortOrderMenu
-                                        selectable={true}
-                                        onSelect={handleSortOrder}
-                                        defaultSelectedKeys={[sortOrder.key]}
-                                    />
-                                }
-                                trigger={["click"]}
+                            <SortOrderMenu
+                                onSelect={handleSortOrder}
+                                defaultSelectedKeys={[sortOrder.key]}
                             >
                                 <Button>
                                     Sort order
                                     <DownOutlined />
                                 </Button>
-                            </Dropdown>
+                            </SortOrderMenu>
                         </Col>
                         <Can do="upload" on="assets">
                             <Col>

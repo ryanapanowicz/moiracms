@@ -3,7 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { CreatePermissionForm } from "../components";
 import { useCreatePermissionMutation } from "../graphql";
 import { PermissionsQuery } from "../graphql/queries/usePermissionsQuery";
-import { notify, PaginatorContext } from "../services";
+import { useNotify } from "../hooks";
+import { PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
 export interface CreatePermissionProps {
@@ -19,6 +20,7 @@ const CreatePermission: React.FC<CreatePermissionProps> = ({
     const [submitting, setSubmitting] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [form] = Form.useForm();
+    const notify = useNotify();
 
     const [createPermission, { error }] = useCreatePermissionMutation();
 

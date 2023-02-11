@@ -2,11 +2,11 @@
 
 namespace Tests\Integration\GraphQL;
 
+use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
-use Tests\TestCase;
 
 class Authentication extends TestCase
 {
@@ -27,7 +27,6 @@ class Authentication extends TestCase
                     id
                     name
                     email
-                    email_verified_at
                     created_at
                     updated_at
                     avatar
@@ -57,7 +56,6 @@ class Authentication extends TestCase
                     id
                     name
                     email
-                    email_verified_at
                     created_at
                     updated_at
                     avatar
@@ -72,7 +70,6 @@ class Authentication extends TestCase
                             'id'                => $admin->id,
                             'name'              => $admin->name,
                             'email'             => $admin->email,
-                            'email_verified_at' => $admin->email_verified_at,
                             'created_at'        => $admin->created_at,
                             'updated_at'        => $admin->updated_at,
                             'avatar'            => $admin->avatar
@@ -81,7 +78,6 @@ class Authentication extends TestCase
                             'id'                => $user->id,
                             'name'              => $user->name,
                             'email'             => $user->email,
-                            'email_verified_at' => $user->email_verified_at,
                             'created_at'        => $user->created_at,
                             'updated_at'        => $user->updated_at,
                             'avatar'            => $user->avatar
@@ -110,7 +106,6 @@ class Authentication extends TestCase
                 id
                 name
                 email
-                email_verified_at
                 created_at
                 updated_at
                 avatar
@@ -122,7 +117,6 @@ class Authentication extends TestCase
                     'id'                => $user->id,
                     'name'              => $user->name,
                     'email'             => $user->email,
-                    'email_verified_at' => $user->email_verified_at,
                     'created_at'        => $user->created_at,
                     'updated_at'        => $user->updated_at,
                     'avatar'            => $user->avatar
@@ -186,7 +180,6 @@ class Authentication extends TestCase
                     id
                     name
                     email
-                    email_verified_at
                     created_at
                     updated_at
                     avatar
@@ -204,7 +197,6 @@ class Authentication extends TestCase
                         'id'                => $user->id,
                         'name'              => $user->name,
                         'email'             => $user->email,
-                        'email_verified_at' => $user->email_verified_at,
                         'created_at'        => $user->created_at,
                         'updated_at'        => $user->updated_at,
                         'avatar'            => $user->avatar
@@ -239,7 +231,6 @@ class Authentication extends TestCase
                     id
                     name
                     email
-                    email_verified_at
                     created_at
                     updated_at
                     avatar
@@ -257,7 +248,6 @@ class Authentication extends TestCase
                         'id'                => $user->id,
                         'name'              => $user->name,
                         'email'             => $user->email,
-                        'email_verified_at' => $user->email_verified_at,
                         'created_at'        => $user->created_at,
                         'updated_at'        => $user->updated_at,
                         'avatar'            => $user->avatar
@@ -286,7 +276,6 @@ class Authentication extends TestCase
                     id
                     name
                     email
-                    email_verified_at
                     created_at
                     updated_at
                     avatar
@@ -304,7 +293,6 @@ class Authentication extends TestCase
                         'id'                => $adminCopy->id,
                         'name'              => $adminCopy->name,
                         'email'             => $adminCopy->email,
-                        'email_verified_at' => $adminCopy->email_verified_at,
                         'created_at'        => $adminCopy->created_at,
                         'updated_at'        => $adminCopy->updated_at,
                         'avatar'            => $adminCopy->avatar

@@ -1,9 +1,10 @@
-import { Affix, Breadcrumb, Button, Layout } from "antd";
+import { Breadcrumb, Button } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { UsersTable } from "../components";
+import { PageLayout, UsersTable } from "../components";
 import { useUsersQuery } from "../graphql";
-import { Can, notify, PaginatorContext } from "../services";
+import { useNotify } from "../hooks";
+import { Can, PaginatorContext } from "../services";
 import { formatError, getSorterVars } from "../utils";
 
 const Users: React.FC = () => {
@@ -13,6 +14,7 @@ const Users: React.FC = () => {
         pageSize: 10,
         total: 0,
     });
+    const notify = useNotify();
 
     const { data, error, loading, fetchMore } = useUsersQuery({
         variables: getVariables("users"),
@@ -56,9 +58,9 @@ const Users: React.FC = () => {
     }, [error]);
 
     return (
-        <Layout className="page">
-            <Affix className="header-affix">
-                <Layout.Header className="page-header">
+        <PageLayout
+            header={
+                <>
                     <Breadcrumb className="page-title">
                         <Breadcrumb.Item key="settings">
                             Settings
@@ -70,23 +72,20 @@ const Users: React.FC = () => {
                     <Can do="create" on="users">
                         <div className="page-tools">
                             <Button type="primary">
-                                <Link to="create">
-                                    Create new User
-                                </Link>
+                                <Link to="create">Create new User</Link>
                             </Button>
                         </div>
                     </Can>
-                </Layout.Header>
-            </Affix>
-            <Layout.Content className="page-content">
-                <UsersTable
-                    dataSource={data?.users.data}
-                    loading={loading}
-                    pagination={{ hideOnSinglePage: true, ...paginate }}
-                    onChange={handleChange}
-                />
-            </Layout.Content>
-        </Layout>
+                </>
+            }
+        >
+            <UsersTable
+                dataSource={data?.users.data}
+                loading={loading}
+                pagination={{ hideOnSinglePage: true, ...paginate }}
+                onChange={handleChange}
+            />
+        </PageLayout>
     );
 };
 

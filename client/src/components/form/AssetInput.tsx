@@ -117,7 +117,10 @@ const AssetInput: React.FC<AssetInputProps> = ({
     };
 
     return (
-        <ConfigProvider renderEmpty={() => <></>}>
+        <ConfigProvider
+            theme={{ token: { padding: 0 } }}
+            renderEmpty={() => <></>}
+        >
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
@@ -127,14 +130,18 @@ const AssetInput: React.FC<AssetInputProps> = ({
                     items={assets ? assets.map((value) => value.key) : []}
                     strategy={rectSortingStrategy}
                 >
-                    <Button type="primary" onClick={handleClick}>
+                    <Button
+                        type="primary"
+                        onClick={handleClick}
+                        style={{ marginBottom: 30 }}
+                    >
                         Add Assets
                     </Button>
                     <List
                         className="asset-input"
                         grid={{
                             gutter: 32,
-                            column: 6,
+                            column: 4,
                         }}
                         dataSource={assets}
                         renderItem={(asset, index) => (

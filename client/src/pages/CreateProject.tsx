@@ -1,17 +1,19 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Affix, Alert, Button, Layout, Space } from "antd";
+import { Alert, Button, Space } from "antd";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CreateProjectForm } from "../components";
+import { CreateProjectForm, PageLayout } from "../components";
 import { useCreateProjectMutation } from "../graphql";
 import { ProjectsQuery } from "../graphql/queries/useProjectsQuery";
-import { notify, PaginatorContext } from "../services";
+import { useNotify } from "../hooks";
+import { PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
 const CreateProject: React.FC = () => {
     const { getVariables } = useContext(PaginatorContext);
     const [submitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
+    const notify = useNotify();
 
     const [createProject, { error }] = useCreateProjectMutation();
 
@@ -54,9 +56,9 @@ const CreateProject: React.FC = () => {
     };
 
     return (
-        <Layout className="page">
-            <Affix className="header-affix">
-                <Layout.Header className="page-header">
+        <PageLayout
+            header={
+                <>
                     <Space className="page-title" size="middle">
                         <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
@@ -82,19 +84,18 @@ const CreateProject: React.FC = () => {
                             Save
                         </Button>
                     </div>
-                </Layout.Header>
-            </Affix>
-            <Layout.Content className="page-content">
-                {error && (
-                    <Alert
-                        message={formatError(error)}
-                        type="error"
-                        style={{ marginBottom: "24px" }}
-                    />
-                )}
-                <CreateProjectForm onFinish={handleFinish} />
-            </Layout.Content>
-        </Layout>
+                </>
+            }
+        >
+            {error && (
+                <Alert
+                    message={formatError(error)}
+                    type="error"
+                    style={{ marginBottom: "24px" }}
+                />
+            )}
+            <CreateProjectForm onFinish={handleFinish} />
+        </PageLayout>
     );
 };
 

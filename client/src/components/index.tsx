@@ -5,7 +5,7 @@ import {
     Editor,
     FilePreview,
     Uploader,
-    Viewer,
+    Viewer
 } from "./asset";
 import {
     AssetInput,
@@ -25,15 +25,15 @@ import {
     RolesSelect,
     SortOrderMenu,
     UpdateProjectForm,
-    UpdateUserForm,
+    UpdateUserForm
 } from "./form";
-import { AdminLayout, AuthLayout, Sidebar } from "./layout";
+import { AdminLayout, AuthLayout, PageLayout, Sidebar } from "./layout";
 import {
     AssetList,
     PermissionsList,
     RenderEmpty,
     RolePermissionsList,
-    RolesList,
+    RolesList
 } from "./list";
 import { ProjectsTable, UsersTable } from "./table";
 
@@ -65,6 +65,7 @@ export {
     UpdateUserForm,
     AdminLayout,
     AuthLayout,
+    PageLayout,
     AssetList,
     PermissionsList,
     RolePermissionsList,

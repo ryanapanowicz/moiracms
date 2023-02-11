@@ -1,9 +1,10 @@
-import { Affix, Breadcrumb, Button, Layout } from "antd";
+import { Breadcrumb, Button } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ProjectsTable } from "../components";
+import { PageLayout, ProjectsTable } from "../components";
 import { useProjectsQuery } from "../graphql";
-import { Can, notify, PaginatorContext } from "../services";
+import { useNotify } from "../hooks";
+import { Can, PaginatorContext } from "../services";
 import { formatError, getSorterVars } from "../utils";
 
 const Projects: React.FC = () => {
@@ -13,6 +14,7 @@ const Projects: React.FC = () => {
         pageSize: 10,
         total: 0,
     });
+    const notify = useNotify();
 
     const { data, error, loading, fetchMore } = useProjectsQuery({
         variables: getVariables("projects"),
@@ -56,9 +58,9 @@ const Projects: React.FC = () => {
     }, [error]);
 
     return (
-        <Layout className="page">
-            <Affix className="header-affix">
-                <Layout.Header className="page-header">
+        <PageLayout
+            header={
+                <>
                     <Breadcrumb className="page-title">
                         <Breadcrumb.Item key="content">Content</Breadcrumb.Item>
                         <Breadcrumb.Item key="content.projects">
@@ -68,23 +70,20 @@ const Projects: React.FC = () => {
                     <Can do="create" on="projects">
                         <div className="page-tools">
                             <Button type="primary">
-                                <Link to="create">
-                                    Create new Project
-                                </Link>
+                                <Link to="create">Create new Project</Link>
                             </Button>
                         </div>
                     </Can>
-                </Layout.Header>
-            </Affix>
-            <Layout.Content className="page-content">
-                <ProjectsTable
-                    dataSource={data?.projects.data}
-                    loading={loading}
-                    pagination={{ hideOnSinglePage: true, ...paginate }}
-                    onChange={handleChange}
-                />
-            </Layout.Content>
-        </Layout>
+                </>
+            }
+        >
+            <ProjectsTable
+                dataSource={data?.projects.data}
+                loading={loading}
+                pagination={{ hideOnSinglePage: true, ...paginate }}
+                onChange={handleChange}
+            />
+        </PageLayout>
     );
 };
 

@@ -3,26 +3,30 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AssetModalProvider } from "./components";
 import reportWebVitals from "./reportWebVitals";
-import { PaginatorProvider, UserProvider } from "./services";
+import { AntdProvider, PaginatorProvider, UserProvider } from "./services";
 import ability from "./services/Ability";
 import { AbilityContext } from "./services/Can";
 import GraphQLProvider from "./services/GraphQLProvider";
 
 const container = document.getElementById("root");
+
 if (container === null) throw new Error("Root container missing in index.html");
 
 const root = createRoot(container);
+
 root.render(
     <BrowserRouter>
         <GraphQLProvider>
             <AbilityContext.Provider value={ability}>
-                <UserProvider>
-                    <PaginatorProvider>
-                        <AssetModalProvider>
-                            <App />
-                        </AssetModalProvider>
-                    </PaginatorProvider>
-                </UserProvider>
+                <AntdProvider>
+                    <UserProvider>
+                        <PaginatorProvider>
+                            <AssetModalProvider>
+                                <App />
+                            </AssetModalProvider>
+                        </PaginatorProvider>
+                    </UserProvider>
+                </AntdProvider>
             </AbilityContext.Provider>
         </GraphQLProvider>
     </BrowserRouter>

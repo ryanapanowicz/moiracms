@@ -1,9 +1,10 @@
-import { Affix, Alert, Button, Form, Layout } from "antd";
+import { Alert, Button, Form } from "antd";
 import React, { useContext, useEffect, useState } from "react";
-import { AdminLayout, ProfileForm } from "../components";
+import { AdminLayout, PageLayout, ProfileForm } from "../components";
 import { useUpdateProfileMutation } from "../graphql";
 import { MeQuery, MeType } from "../graphql/queries/useMeQuery";
-import { notify, UserContext } from "../services";
+import { useNotify } from "../hooks";
+import { UserContext } from "../services";
 import { formatError, getInitials } from "../utils";
 import type { UserDataType } from "./UpdateUser";
 
@@ -14,6 +15,7 @@ const Profile: React.FC = () => {
     const [userData, setUserData] = useState<UserDataType>();
     const [toggle, setToggle] = useState(false);
     const [form] = Form.useForm();
+    const notify = useNotify();
 
     const [updateProfile, { error: updateError }] = useUpdateProfileMutation();
 
@@ -83,9 +85,9 @@ const Profile: React.FC = () => {
 
     return (
         <AdminLayout>
-            <Layout className="page">
-                <Affix className="header-affix">
-                    <Layout.Header className="page-header">
+            <PageLayout
+                header={
+                    <>
                         <h2 className="page-title">Update {userData.name}</h2>
                         <div className="page-tools">
                             <Button
@@ -106,26 +108,25 @@ const Profile: React.FC = () => {
                                 Save
                             </Button>
                         </div>
-                    </Layout.Header>
-                </Affix>
-                <Layout.Content className="page-content">
-                    {updateError && (
-                        <Alert
-                            message={formatError(updateError)}
-                            type="error"
-                            style={{ marginBottom: "24px" }}
-                        />
-                    )}
-                    <ProfileForm
-                        form={form}
-                        onFinish={handleFinish}
-                        initialValues={userData}
-                        imageTitle={getInitials(userData.name)}
-                        passwordToggle={toggle}
-                        onToggleChange={(checked) => setToggle(checked)}
+                    </>
+                }
+            >
+                {updateError && (
+                    <Alert
+                        message={formatError(updateError)}
+                        type="error"
+                        style={{ marginBottom: "24px" }}
                     />
-                </Layout.Content>
-            </Layout>
+                )}
+                <ProfileForm
+                    form={form}
+                    onFinish={handleFinish}
+                    initialValues={userData}
+                    imageTitle={getInitials(userData.name)}
+                    passwordToggle={toggle}
+                    onToggleChange={(checked) => setToggle(checked)}
+                />
+            </PageLayout>
         </AdminLayout>
     );
 };

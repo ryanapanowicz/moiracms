@@ -2,20 +2,19 @@
 
 namespace App\Models;
 
-use App\Traits\HasAssets;
 use App\Traits\HasUuid;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Joselfonseca\LighthouseGraphQLPassport\HasLoggedInTokens;
-use Joselfonseca\LighthouseGraphQLPassport\HasSocialLogin;
-use Joselfonseca\LighthouseGraphQLPassport\MustVerifyEmailGraphQL;
-use Laravel\Passport\HasApiTokens;
+use App\Traits\HasAssets;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Joselfonseca\LighthouseGraphQLPassport\HasSocialLogin;
+use Joselfonseca\LighthouseGraphQLPassport\HasLoggedInTokens;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -24,7 +23,6 @@ class User extends Authenticatable implements HasMedia
         HasFactory,
         Notifiable,
         HasLoggedInTokens,
-        //MustVerifyEmailGraphQL,
         InteractsWithMedia,
         HasSocialLogin,
         HasRoles,
@@ -57,9 +55,7 @@ class User extends Authenticatable implements HasMedia
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $casts = [];
 
     public function registerMediaConversions(Media $media = null): void
     {
@@ -68,5 +64,10 @@ class User extends Authenticatable implements HasMedia
                 ->fit(Manipulations::FIT_CROP, 640, 480)
                 ->sharpen(10);
         }
+    }
+
+    public function shouldDeletePreservingMedia(): bool
+    {
+        return true;
     }
 }

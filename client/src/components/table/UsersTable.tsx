@@ -5,7 +5,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DeleteButton } from "..";
 import { useDeleteUserMutation } from "../../graphql";
-import { notify, PaginatorContext } from "../../services";
+import { useNotify } from "../../hooks";
+import { PaginatorContext } from "../../services";
 import { AbilityContext } from "../../services/Can";
 import { titleCase } from "../../utils";
 
@@ -42,6 +43,7 @@ const UsersTable: React.FC<UsersTableProps> = ({
 }) => {
     const { getVariables, setVariables } = useContext(PaginatorContext);
     const [columns, setColumns] = useState(defaultCol);
+    const notify = useNotify();
 
     const ability = useAbility(AbilityContext);
 

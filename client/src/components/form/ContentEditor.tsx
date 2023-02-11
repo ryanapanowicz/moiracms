@@ -1,13 +1,16 @@
 import ImageResize from "quill-image-resize-module-react";
 import React, { useContext, useMemo } from "react";
 import ReactQuill, { Quill } from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { AssetModalContext } from "..";
 
 // Add image resize module
 Quill.register("modules/imageResize", ImageResize);
 
 declare global {
-    interface Window { Quill: any; }
+    interface Window {
+        Quill: any;
+    }
 }
 
 window.Quill = window.Quill || Quill;

@@ -1,0 +1,64 @@
+// colors
+$primary-color: #373999;
+$success-color: #52c41a;
+$warning-color: #faad14;
+$error-color: #ff4d4f;
+$info-color: #1677ff;
+$background-color: #ffffff;
+$background-color-light: rgba(0, 0, 0, 0.03);
+$background-color-base: rgba(0, 0, 0, 0.02);
+$text-color: rgba(0, 0, 0, 0.85);
+$text-color-secondary: rgba(0, 0, 0, 0.65);
+
+// basic styles
+$font-size-base: 14px;
+$hover-color: #f4f5ff;
+$link-hover-color: #565aa6;
+
+$select-item-active-bg: #ccced9;
+$select-item-selected-bg: #ccced9;
+
+$image-frame-background: $background-color-light;
+$border-color-base: #f0f0f0;
+$border-radius-base: 3px;
+
+// buttons
+$btn-circle-size: 32px;
+$btn-primary-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+
+// shadows
+$shadow-2: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
+$box-shadow-base: 0 6px 16px 0 rgb(0 0 0 / 8%), 0 3px 6px -4px rgb(0 0 0 / 12%),
+    0 9px 28px 8px rgb(0 0 0 / 5%);
+
+// padding
+$padding-lg: 24px;
+$padding-md: 16px;
+$padding-sm: 12px;
+$padding-xs: 8px;
+
+// animation
+$animation-duration-base: 0.2s;
+
+$ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+$ease-in-out-quint: cubic-bezier(0.86, 0, 0.07, 1);
+
+// navigation menu vars
+$navbar-border-color: $border-color-base;
+$navbar-item-color: $text-color;
+$navbar-item-font-size: $font-size-base;
+$navbar-item-hover-color: $primary-color;
+$navbar-item-bg-hover-color: $hover-color;
+$item-hover-bg: $hover-color;
+
+// page vars
+$page-padding: 32px 50px;
+$page-border-color: $border-color-base;
+
+// sidebars
+$main-sidebar-width: 81px;
+$page-sidebar-width: 200px;
+
+// models
+$modal-body-padding: $padding-lg;

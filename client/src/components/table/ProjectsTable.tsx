@@ -5,7 +5,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DeleteButton } from "..";
 import { useDeleteProjectMutation } from "../../graphql";
-import { notify, PaginatorContext } from "../../services";
+import { useNotify } from "../../hooks";
+import { PaginatorContext } from "../../services";
 import { AbilityContext } from "../../services/Can";
 
 export type ProjectsTableProps = {
@@ -41,6 +42,7 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
 }) => {
     const { getVariables, setVariables } = useContext(PaginatorContext);
     const [columns, setColumns] = useState(defaultCol);
+    const notify = useNotify();
     
     const ability = useAbility(AbilityContext);
     const canEdit = ability.can("edit", "projects");

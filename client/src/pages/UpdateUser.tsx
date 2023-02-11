@@ -1,13 +1,14 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Affix, Alert, Button, Form, Layout, Space } from "antd";
+import { Alert, Button, Form, Space } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ServerError } from ".";
-import { UpdateUserForm } from "../components";
+import { PageLayout, UpdateUserForm } from "../components";
 import { useUpdateUserMutation, useUserQuery } from "../graphql";
 import { MeQuery } from "../graphql/queries/useMeQuery";
 import { RolesQuery } from "../graphql/queries/useRolesQuery";
-import { Can, notify, PaginatorContext, UserContext } from "../services";
+import { useNotify } from "../hooks";
+import { Can, PaginatorContext, UserContext } from "../services";
 import { formatError } from "../utils";
 
 export type UserDataType = {
@@ -21,6 +22,7 @@ const UpdateUser: React.FC = () => {
     const { getVariables } = useContext(PaginatorContext);
     const { user } = useContext(UserContext);
     const { id } = useParams();
+    const notify = useNotify();
 
     const [submitting, setSubmitting] = useState(false);
     const [userData, setUserData] = useState<UserDataType>();
@@ -76,7 +78,7 @@ const UpdateUser: React.FC = () => {
                     // Redirect success message on complete
                     if (data?.updateUser.user) {
                         // Reset form password values
-                        form.resetFields(['password', 'password_confirmation']);
+                        form.resetFields(["password", "password_confirmation"]);
                         setToggle(false);
 
                         notify.success({
@@ -109,9 +111,9 @@ const UpdateUser: React.FC = () => {
     }
 
     return (
-        <Layout className="page">
-            <Affix className="header-affix">
-                <Layout.Header className="page-header">
+        <PageLayout
+            header={
+                <>
                     <Space className="page-title" size="middle">
                         <Link to={-1 as any} className="back-link">
                             <ArrowLeftOutlined />
@@ -139,25 +141,24 @@ const UpdateUser: React.FC = () => {
                             </Button>
                         </div>
                     </Can>
-                </Layout.Header>
-            </Affix>
-            <Layout.Content className="page-content">
-                {updateError && (
-                    <Alert
-                        message={formatError(updateError)}
-                        type="error"
-                        style={{ marginBottom: "24px" }}
-                    />
-                )}
-                <UpdateUserForm
-                    form={form}
-                    onFinish={handleFinish}
-                    initialValues={userData}
-                    passwordToggle={toggle}
-                    onToggleChange={(checked) => setToggle(checked)}
+                </>
+            }
+        >
+            {updateError && (
+                <Alert
+                    message={formatError(updateError)}
+                    type="error"
+                    style={{ marginBottom: "24px" }}
                 />
-            </Layout.Content>
-        </Layout>
+            )}
+            <UpdateUserForm
+                form={form}
+                onFinish={handleFinish}
+                initialValues={userData}
+                passwordToggle={toggle}
+                onToggleChange={(checked) => setToggle(checked)}
+            />
+        </PageLayout>
     );
 };
 

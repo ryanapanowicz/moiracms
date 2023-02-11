@@ -6,19 +6,20 @@ extend type Query {
 }
 
 extend type Mutation {
-    "Authentication mutations"
+    # Authentication mutations
     login(input: LoginInput @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
     refreshToken(input: RefreshTokenInput @spread): RefreshTokenPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\RefreshToken@resolve")
     logout: LogoutResponse!
     forgotPassword(input: ForgotPasswordInput! @spread): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
     resetPassword(input: NewPasswordWithCodeInput @spread): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
-    "Uncomment to enable Registration"
+    # Uncomment to enable Registration
     #register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Register@resolve")
     #socialLogin(input: SocialLoginInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\SocialLogin@resolve")
-    verifyEmail(input: VerifyEmailInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\VerifyEmail@resolve")
-    updatePassword(input: UpdatePassword! @spread): UpdatePasswordResponse! @guard(with: ["api"]) @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\UpdatePassword@resolve")
+}
 
-    "User mutations"
+extend type Mutation @guard {
+    # User mutations
+    updatePassword(input: UpdatePassword! @spread): UpdatePasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\UpdatePassword@resolve")
     createUser(input: CreateUserInput @spread): CreateUserPayload @hasAccess(permission: "create users")
     updateUser(id: ID! @eq, input: UpdateUserInput @spread): UpdateUserPayload @hasAccess(permission: "edit users", owner: true, model: "User")
     deleteUser(id: ID!): DeleteUserPayload @hasAccess(permission: "delete users")
@@ -30,7 +31,6 @@ type User {
     email: String!
     created_at: DateTime! @hasAccess(permission: "view users")
     updated_at: DateTime! @hasAccess(permission: "view users")
-    email_verified_at: DateTime @hasAccess(permission: "view users")
     avatar: String
     roles(order_by: [OrderByClause!] @orderBy): [Role!] @hasMany @hasAccess(permission: "view roles")
 }
@@ -96,7 +96,6 @@ type UpdatePasswordResponse {
 }
 
 enum RegisterStatuses {
-    MUST_VERIFY_EMAIL
     SUCCESS
 }
 
@@ -129,10 +128,6 @@ input RegisterInput {
 
 input SocialLoginInput {
     provider: String!
-    token: String!
-}
-
-input VerifyEmailInput {
     token: String!
 }
 

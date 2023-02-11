@@ -5,7 +5,7 @@ import { useAssignPermissionToRoleMutation } from "../graphql";
 import { MeQuery } from "../graphql/queries/useMeQuery";
 import { RoleQuery } from "../graphql/queries/useRoleQuery";
 import { Role } from "../graphql/types";
-import { notify } from "../services";
+import { useNotify } from "../hooks";
 import { formatError } from "../utils";
 
 export interface AssignPermissionProps {
@@ -22,6 +22,7 @@ const AssignPermission: React.FC<AssignPermissionProps> = ({
     const [submitting, setSubmitting] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [form] = Form.useForm();
+    const notify = useNotify();
 
     const [assignPermissionToRole, { error }] =
         useAssignPermissionToRoleMutation();

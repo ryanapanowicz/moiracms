@@ -1,12 +1,12 @@
 
-extend type Query @guard(with: ["api"]) {
+extend type Query @guard {
     roles(order_by: [OrderByClause!] @orderBy): [Role] @paginate @hasAccess(permission: "view roles")
-    role(id: ID @eq): Role @guard(with: ["api"]) @find @hasAccess(permission: "view roles")
+    role(id: ID @eq): Role @find @hasAccess(permission: "view roles")
     permissions(order_by: [OrderByClause!] @orderBy): [Permission] @paginate @hasAccess(permission: "view permissions")
-    permission(id: ID @eq): Permission @guard(with: ["api"]) @find @hasAccess(permission: "view permissions")
+    permission(id: ID @eq): Permission @find @hasAccess(permission: "view permissions")
 }
 
-extend type Mutation @guard(with: ["api"]) {
+extend type Mutation @guard {
     "Roles mutations"
     createRole(input: CreateRoleInput @spread): CreateRolePayload @hasAccess(permission: "create roles")
     deleteRole(id: ID!): DeleteRolePayload @hasAccess(permission: "delete roles")

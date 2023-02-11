@@ -1,11 +1,11 @@
 
 .admin-layout {
-    margin-left: @main-sidebar-width;
+    margin-left: $main-sidebar-width;
 }
 
 .ant-layout-has-sider.page-layout {
     position: relative;
-    margin-left: @page-sidebar-width;
+    margin-left: $page-sidebar-width;
 }
 
 .page-title {
@@ -38,7 +38,7 @@
 }
 
 .page-sider {
-    border-right: 1px solid @page-border-color;
+    border-right: 1px solid $page-border-color;
 }
 
 .page-sider-title {
@@ -46,9 +46,12 @@
     align-items: center;
     height: 64px;
     padding: 0 23px;
+    margin-bottom: 15px;
+    color: rgba(0, 0, 0, 0.85);
 
     h1 {
         font-size: 24px;
+        font-weight: 500;
         line-height: 32px;
         margin-bottom: 0;
     }
@@ -57,26 +60,26 @@
 .page-header {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid @page-border-color;
+    border-bottom: 1px solid $page-border-color;
 }
 
 .page-content {
     position: relative;
     margin: 0;
     min-width: 400px;
-    padding: @page-padding;
+    padding: $page-padding;
 
     .table table {
-        border-top: 1px solid @page-border-color;
-        border-left: 1px solid @page-border-color;
-        border-right: 1px solid @page-border-color;
+        border: 1px solid $page-border-color;
     }
 }
 
 .item-list {
     .ant-list-item {
+        padding-left: 15px !important;
+
         &:hover {
-            background-color: @background-color-light;
+            background-color: $background-color-light;
         }
     }
 }

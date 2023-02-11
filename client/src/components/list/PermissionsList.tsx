@@ -4,7 +4,8 @@ import React, { useContext } from "react";
 import { DeleteButton } from "..";
 import { useDeletePermissionMutation } from "../../graphql";
 import { MeQuery } from "../../graphql/queries/useMeQuery";
-import { notify, PaginatorContext } from "../../services";
+import { useNotify } from "../../hooks";
+import { PaginatorContext } from "../../services";
 import { AbilityContext } from "../../services/Can";
 
 export type PermissionsListProps = {
@@ -21,6 +22,7 @@ const PermissionsList: React.FC<PermissionsListProps> = ({
     onChange,
 }) => {
     const { setVariables } = useContext(PaginatorContext);
+    const notify = useNotify();
 
     const ability = useAbility(AbilityContext);
 

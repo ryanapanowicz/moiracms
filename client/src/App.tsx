@@ -7,19 +7,19 @@ import {
     ForgotPassword,
     Login,
     Profile,
-    Register,
-    ResetPassword, ServerError, Settings
+    ResetPassword,
+    ServerError,
+    Settings
 } from "./pages";
 import { Auth, RequireAuth } from "./services";
-import "./styles/App.less";
+import "./styles/App.scss";
 
 const App: React.FC = () => {
     return (
         <div className="App">
             <Routes>
                 <Route path="/login" element={<Login />} />
-                {/* Uncomment if Registration is required  */}
-                <Route path="/register" element={<Register />} /> 
+                {/* <Route path="/register" element={<Register />} /> // Uncomment if Registration is required  */}
                 <Route path="/password/forgot" element={<ForgotPassword />} />
                 <Route
                     path="/password/reset/:token"

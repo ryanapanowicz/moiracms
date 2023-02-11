@@ -2,6 +2,7 @@
     "name": "ryanapanowicz/moiracms",
     "type": "project",
     "description": "Headless CMS powered by Laravel.",
+    "version": "0.1.5",
     "keywords": [
         "headless",
         "cms",

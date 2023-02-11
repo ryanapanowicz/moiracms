@@ -1,6 +1,6 @@
 import { DownOutlined, EyeOutlined, FormOutlined } from "@ant-design/icons";
 import { useAbility } from "@casl/react";
-import { Affix, Breadcrumb, Button, Col, Dropdown, Layout, Row } from "antd";
+import { Breadcrumb, Button, Col, Layout, Row } from "antd";
 import type { SelectEventHandler } from "rc-menu/lib/interface";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import {
     AdminLayout,
     AssetList,
     AssetModalContext,
+    PageLayout,
     SortOrderMenu
 } from "../components";
 import { sortOrderData } from "../components/form/SortOrderMenu";
@@ -127,32 +128,24 @@ const Assets: React.FC = () => {
     return (
         <AdminLayout>
             <Layout className="page-layout">
-                <Layout className="page">
-                    <Affix className="header-affix">
-                        <Layout.Header className="page-header">
+                <PageLayout
+                    header={
+                        <>
                             <div className="page-title">
                                 <Breadcrumb className="title">
                                     <Breadcrumb.Item key="assets">
                                         Media Assets
                                     </Breadcrumb.Item>
                                 </Breadcrumb>
-                                <Dropdown
-                                    overlay={
-                                        <SortOrderMenu
-                                            selectable={true}
-                                            onSelect={handleSortOrder}
-                                            defaultSelectedKeys={[
-                                                sortOrder.key,
-                                            ]}
-                                        />
-                                    }
-                                    trigger={["click"]}
+                                <SortOrderMenu
+                                    onSelect={handleSortOrder}
+                                    defaultSelectedKeys={[sortOrder.key]}
                                 >
                                     <Button>
                                         Sort order
                                         <DownOutlined />
                                     </Button>
-                                </Dropdown>
+                                </SortOrderMenu>
                             </div>
                             <Can do="upload" on="assets">
                                 <div className="page-tools">
@@ -164,43 +157,42 @@ const Assets: React.FC = () => {
                                     </Button>
                                 </div>
                             </Can>
-                        </Layout.Header>
-                    </Affix>
-                    <Layout.Content className="page-content">
-                        <Row>
-                            <Col span={24}>
-                                <AssetList
-                                    dataSource={data?.assets.data}
-                                    loading={loading}
-                                    pagination={paginate}
-                                    overlay={true}
-                                    overlayTitle={
-                                        ability.can("edit", "assets") ? (
-                                            <>
-                                                <FormOutlined />
-                                                Edit
-                                            </>
-                                        ) : (
-                                            <>
-                                                <EyeOutlined />
-                                                View
-                                            </>
-                                        )
-                                    }
-                                    onChange={handleChange}
-                                    onAssetClick={handleAssetClick}
-                                    onBtnClick={
-                                        ability.can("upload", "assets")
-                                            ? () => {
-                                                  showAssetModal();
-                                              }
-                                            : undefined
-                                    }
-                                />
-                            </Col>
-                        </Row>
-                    </Layout.Content>
-                </Layout>
+                        </>
+                    }
+                >
+                    <Row>
+                        <Col span={24}>
+                            <AssetList
+                                dataSource={data?.assets.data}
+                                loading={loading}
+                                pagination={paginate}
+                                overlay={true}
+                                overlayTitle={
+                                    ability.can("edit", "assets") ? (
+                                        <>
+                                            <FormOutlined />
+                                            Edit
+                                        </>
+                                    ) : (
+                                        <>
+                                            <EyeOutlined />
+                                            View
+                                        </>
+                                    )
+                                }
+                                onChange={handleChange}
+                                onAssetClick={handleAssetClick}
+                                onBtnClick={
+                                    ability.can("upload", "assets")
+                                        ? () => {
+                                              showAssetModal();
+                                          }
+                                        : undefined
+                                }
+                            />
+                        </Col>
+                    </Row>
+                </PageLayout>
             </Layout>
         </AdminLayout>
     );

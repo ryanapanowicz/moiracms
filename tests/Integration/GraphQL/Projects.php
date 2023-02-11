@@ -2,9 +2,9 @@
 
 namespace Tests\Integration\GraphQL;
 
+use Tests\TestCase;
 use App\Models\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class Projects extends TestCase
 {
@@ -28,44 +28,56 @@ class Projects extends TestCase
                 data {
                     id
                     title
+                    subtitle
                     slug
                     content
                     link
+                    work_done
                     built_with
                     keywords
                     description
+                    start
+                    end
                 }
             }
         }
         '
         )->assertJson([
-            'data' => [
-                'projects' => [
-                    'data' => [
-                        [
-                            'id'            => $project->id,
-                            'title'         => $project->title,
-                            'slug'          => $project->slug,
-                            'content'       => $project->content,
-                            'link'          => $project->link,
-                            'built_with'    => $project->built_with,
-                            'keywords'      => $project->keywords,
-                            'description'   => $project->description,
-                        ],
-                        [
-                            'id'            => $project_alt->id,
-                            'title'         => $project_alt->title,
-                            'slug'          => $project_alt->slug,
-                            'content'       => $project_alt->content,
-                            'link'          => $project_alt->link,
-                            'built_with'    => $project_alt->built_with,
-                            'keywords'      => $project_alt->keywords,
-                            'description'   => $project_alt->description,
+                'data' => [
+                    'projects' => [
+                        'data' => [
+                            [
+                                'id' => $project->id,
+                                'title' => $project->title,
+                                'subtitle' => $project->subtitle,
+                                'slug' => $project->slug,
+                                'content' => $project->content,
+                                'link' => $project->link,
+                                'work_done' => $project->work_done,
+                                'built_with' => $project->built_with,
+                                'keywords' => $project->keywords,
+                                'description' => $project->description,
+                                'start' => $project->start->format('Y-m-d'),
+                                'end' => $project->end->format('Y-m-d'),
+                            ],
+                            [
+                                'id' => $project_alt->id,
+                                'title' => $project_alt->title,
+                                'subtitle' => $project_alt->subtitle,
+                                'slug' => $project_alt->slug,
+                                'content' => $project_alt->content,
+                                'link' => $project_alt->link,
+                                'work_done' => $project_alt->work_done,
+                                'built_with' => $project_alt->built_with,
+                                'keywords' => $project_alt->keywords,
+                                'description' => $project_alt->description,
+                                'start' => $project_alt->start->format('Y-m-d'),
+                                'end' => $project_alt->end->format('Y-m-d'),
+                            ]
                         ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
     }
 
     /**
@@ -84,29 +96,37 @@ class Projects extends TestCase
             project(id: "' . $project->id . '") {
                 id
                 title
+                subtitle
                 slug
                 content
                 link
+                work_done
                 built_with
                 keywords
                 description
+                start
+                end
             }
         }
         '
         )->assertJson([
-            'data' => [
-                'project' => [
-                    'id'            => $project->id,
-                    'title'         => $project->title,
-                    'slug'          => $project->slug,
-                    'content'       => $project->content,
-                    'link'          => $project->link,
-                    'built_with'    => $project->built_with,
-                    'keywords'      => $project->keywords,
-                    'description'   => $project->description,
+                'data' => [
+                    'project' => [
+                        'id' => $project->id,
+                        'title' => $project->title,
+                        'subtitle' => $project->subtitle,
+                        'slug' => $project->slug,
+                        'content' => $project->content,
+                        'link' => $project->link,
+                        'work_done' => $project->work_done,
+                        'built_with' => $project->built_with,
+                        'keywords' => $project->keywords,
+                        'description' => $project->description,
+                        'start' => $project->start->format('Y-m-d'),
+                        'end' => $project->end->format('Y-m-d'),
+                    ]
                 ]
-            ]
-        ]);
+            ]);
     }
 
     /**
@@ -123,41 +143,53 @@ class Projects extends TestCase
         mutation {
             createProject(input: {
                 title: "Testing 123",
+                subtitle: "Testing",
                 content: "Testing Content.",
                 link: "http://www.moiracms.com",
+                work_done: "Some work description",
                 built_with: ["Laravel", "React"],
                 keywords: ["Test", "Tester"],
                 description: "Testing 123"
+                start: "2023-01-01",
+                end: "2023-12-01",
             }) {
                 project {
                     id
                     title
+                    subtitle
                     slug
                     content
                     link
+                    work_done
                     built_with
                     keywords
                     description
+                    start
+                    end
                 }
             }
         }
         '
         );
 
-        $project = Project::all()->last();
+        $result = Project::all()->last();
 
         $response->assertJson([
             'data' => [
                 'createProject' => [
                     'project' => [
-                        'id'            => $project->id,
-                        'title'         => $project->title,
-                        'slug'          => $project->slug,
-                        'content'       => $project->content,
-                        'link'          => $project->link,
-                        'built_with'    => $project->built_with,
-                        'keywords'      => $project->keywords,
-                        'description'   => $project->description,
+                        'id' => $result->id,
+                        'title' => 'Testing 123',
+                        'subtitle' => 'Testing',
+                        'slug' => 'testing-123',
+                        'content' => 'Testing Content.',
+                        'link' => 'http://www.moiracms.com',
+                        'work_done' => 'Some work description',
+                        'built_with' => ['Laravel', 'React'],
+                        'keywords' => ['Test', 'Tester'],
+                        'description' => 'Testing 123',
+                        'start' => '2023-01-01',
+                        'end' => '2023-12-01',
                     ]
                 ]
             ]
@@ -180,43 +212,53 @@ class Projects extends TestCase
             '
         mutation {
             updateProject(id: "' . $project->id . '", input: {
-                title: "Testings 123",
-                slug: "testings-123",
+                title: "Testing 123",
+                subtitle: "Testing",
+                slug: "testing-123",
                 content: "Testing Content.",
                 link: "http://www.moiracms.com",
+                work_done: "Some work description",
                 built_with: ["Laravel", "React"],
                 keywords: ["Test", "Tester"],
                 description: "Testing 123"
+                start: "2023-01-01",
+                end: "2023-12-01",
             }) {
                 project {
                     id
                     title
+                    subtitle
                     slug
                     content
                     link
+                    work_done
                     built_with
                     keywords
                     description
+                    start
+                    end
                 }
             }
         }
         '
         );
 
-        $project = Project::all()->last();
-
         $response->assertJson([
             'data' => [
                 'updateProject' => [
                     'project' => [
-                        'id'            => $project->id,
-                        'title'         => $project->title,
-                        'slug'          => $project->slug,
-                        'content'       => $project->content,
-                        'link'          => $project->link,
-                        'built_with'    => $project->built_with,
-                        'keywords'      => $project->keywords,
-                        'description'   => $project->description,
+                        'id' => $project->id,
+                        'title' => 'Testing 123',
+                        'subtitle' => 'Testing',
+                        'slug' => 'testing-123',
+                        'content' => 'Testing Content.',
+                        'link' => 'http://www.moiracms.com',
+                        'work_done' => 'Some work description',
+                        'built_with' => ['Laravel', 'React'],
+                        'keywords' => ['Test', 'Tester'],
+                        'description' => 'Testing 123',
+                        'start' => '2023-01-01',
+                        'end' => '2023-12-01',
                     ]
                 ]
             ]
@@ -242,12 +284,16 @@ class Projects extends TestCase
                 project {
                     id
                     title
+                    subtitle
                     slug
                     content
                     link
+                    work_done
                     built_with
                     keywords
                     description
+                    start
+                    end
                 }
             }
         }
@@ -260,14 +306,18 @@ class Projects extends TestCase
             'data' => [
                 'deleteProject' => [
                     'project' => [
-                        'id'            => $project->id,
-                        'title'         => $project->title,
-                        'slug'          => $project->slug,
-                        'content'       => $project->content,
-                        'link'          => $project->link,
-                        'built_with'    => $project->built_with,
-                        'keywords'      => $project->keywords,
-                        'description'   => $project->description,
+                        'id' => $project->id,
+                        'title' => $project->title,
+                        'subtitle' => $project->subtitle,
+                        'slug' => $project->slug,
+                        'content' => $project->content,
+                        'link' => $project->link,
+                        'work_done' => $project->work_done,
+                        'built_with' => $project->built_with,
+                        'keywords' => $project->keywords,
+                        'description' => $project->description,
+                        'start' => $project->start->format('Y-m-d'),
+                        'end' => $project->end->format('Y-m-d'),
                     ]
                 ]
             ]

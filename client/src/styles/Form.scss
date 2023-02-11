@@ -1,0 +1,40 @@
+.form-title {
+    margin-bottom: 16px;
+}
+
+.profile-image-link {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+
+    &:hover {
+        .ant-image-mask {
+            opacity: 1;
+        }
+    }
+
+    .ant-image-mask {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s;
+        border-radius: $border-radius-base;
+
+        .ant-image-mask-info {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            padding: 0 4px;
+
+            .anticon {
+                margin-right: 4px;
+            }
+        }
+    }
+}

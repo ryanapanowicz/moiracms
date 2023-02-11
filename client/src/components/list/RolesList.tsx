@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { DeleteButton } from "..";
 import { useDeleteRoleMutation } from "../../graphql";
 import { MeQuery } from "../../graphql/queries/useMeQuery";
-import { notify, PaginatorContext } from "../../services";
+import { useNotify } from "../../hooks";
+import { PaginatorContext } from "../../services";
 import { AbilityContext } from "../../services/Can";
 
 export type RolesListProps = {
@@ -23,6 +24,8 @@ const RolesList: React.FC<RolesListProps> = ({
     onChange,
 }) => {
     const { setVariables } = useContext(PaginatorContext);
+    const notify = useNotify();
+
     const ability = useAbility(AbilityContext);
     const canEdit = ability.can("edit", "roles");
     const canDelete = ability.can("delete", "roles");

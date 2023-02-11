@@ -3,7 +3,7 @@
 <p align="center">
     <a href="https://laravel.com/"><img src="https://img.shields.io/badge/laravel-9.19-blue" alt="laravel 9.19"></a>
     <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/react-18.2.0-blue" alt="react 18.2.0"></a>
-    <a href="https://ant.design/"><img src="https://img.shields.io/badge/antd-4.23.6-blue" alt="antd 4.23.6"></a>
+    <a href="https://ant.design/"><img src="https://img.shields.io/badge/antd-5.2.0-blue" alt="antd 5.2.0"></a>
 </p>
 
 ## About Moira CMS
@@ -29,8 +29,8 @@ You can interact with the GraphQL API in a development environment by visiting h
 
 #### Admin Frontend Install
 - Run ```cd client```
-- Run ```yarn install```
-- Run ```yarn start``` or ```yarn build``` for a production build.
+- Run ```npm install```
+- Run ```npm start``` or ```npm build``` for a production build.
 
 ## License
 

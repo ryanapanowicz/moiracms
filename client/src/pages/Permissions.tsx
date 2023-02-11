@@ -1,9 +1,10 @@
-import { Affix, Breadcrumb, Button, Col, Layout, Row } from "antd";
+import { Breadcrumb, Button, Col, Row } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { CreatePermission } from ".";
-import { PermissionsList } from "../components";
+import { PageLayout, PermissionsList } from "../components";
 import { usePermissionsQuery } from "../graphql";
-import { Can, notify, PaginatorContext } from "../services";
+import { useNotify } from "../hooks";
+import { Can, PaginatorContext } from "../services";
 import { formatError } from "../utils";
 
 const Permissions: React.FC = () => {
@@ -14,6 +15,7 @@ const Permissions: React.FC = () => {
         pageSize: 10,
         total: 0,
     });
+    const notify = useNotify();
 
     const { data, loading, error, fetchMore } = usePermissionsQuery({
         variables: getVariables("permissions"),
@@ -63,9 +65,9 @@ const Permissions: React.FC = () => {
     }, [error]);
 
     return (
-        <Layout className="page">
-            <Affix className="header-affix">
-                <Layout.Header className="page-header">
+        <PageLayout
+            header={
+                <>
                     <Breadcrumb className="page-title">
                         <Breadcrumb.Item key="settings">
                             Settings
@@ -81,29 +83,28 @@ const Permissions: React.FC = () => {
                             </Button>
                         </div>
                     </Can>
-                </Layout.Header>
-            </Affix>
-            <Layout.Content className="page-content">
-                <Row>
-                    <Col span={24}>
-                        <h2 className="form-title">Permissions</h2>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={24}>
-                        <PermissionsList
-                            dataSource={data?.permissions.data}
-                            loading={loading}
-                            pagination={{ hideOnSinglePage: true, ...paginate }}
-                            onChange={handleChange}
-                        />
-                    </Col>
-                </Row>
-                {visible && (
-                    <CreatePermission visible={visible} onClose={hideModal} />
-                )}
-            </Layout.Content>
-        </Layout>
+                </>
+            }
+        >
+            <Row>
+                <Col span={24}>
+                    <h2 className="form-title">Permissions</h2>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={24}>
+                    <PermissionsList
+                        dataSource={data?.permissions.data}
+                        loading={loading}
+                        pagination={{ hideOnSinglePage: true, ...paginate }}
+                        onChange={handleChange}
+                    />
+                </Col>
+            </Row>
+            {visible && (
+                <CreatePermission visible={visible} onClose={hideModal} />
+            )}
+        </PageLayout>
     );
 };
 
