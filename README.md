@@ -30,7 +30,7 @@ You can interact with the GraphQL API in a development environment by visiting h
 #### Admin Frontend Install
 - Run ```cd client```
 - Run ```npm install```
-- Run ```npm start``` or ```npm build``` for a production build.
+- Run ```npm start``` or ```npm run build``` for a production build.
 
 ## License
 
