@@ -201,7 +201,7 @@ const Editor: React.FC<EditorProps> = ({
                 <Row gutter={[24, 24]}>
                     <Col xs={24} md={12}>
                         <div className="asset-frame">
-                            {data?.asset.type === "image" ? (
+                            {data?.asset.url ? (
                                 <img
                                     src={data?.asset.url}
                                     alt={data?.asset.alternative_text}

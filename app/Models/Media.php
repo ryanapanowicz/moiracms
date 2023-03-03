@@ -18,7 +18,7 @@ class Media extends BaseMedia
 
     public function getPreviewAttribute()
     {
-        if ($this->type === 'image') {
+        if ($this->hasGeneratedConversion('preview')) {
             return $this->getUrl('preview');
         }
 

@@ -34,7 +34,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
                 bordered={false}
                 cover={
                     <>
-                        {file.type === "image" ? (
+                        {file.preview ? (
                             <img
                                 src={file.preview}
                                 alt={file.alternative_text}

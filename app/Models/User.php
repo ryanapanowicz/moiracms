@@ -59,11 +59,9 @@ class User extends Authenticatable implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
-        if ($media->type === "image") {
-            $this->addMediaConversion('preview')
-                ->fit(Manipulations::FIT_CROP, 640, 480)
-                ->sharpen(10);
-        }
+        $this->addMediaConversion('preview')
+            ->fit(Manipulations::FIT_CROP, 640, 480)
+            ->sharpen(10);
     }
 
     public function shouldDeletePreservingMedia(): bool
