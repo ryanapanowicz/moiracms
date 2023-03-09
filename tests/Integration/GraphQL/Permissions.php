@@ -2,12 +2,12 @@
 
 namespace Tests\Integration\GraphQL;
 
-use App\Models\Permission;
+use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\Permission;
 use Illuminate\Support\Arr;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class Permissions extends TestCase
 {
@@ -48,7 +48,7 @@ class Permissions extends TestCase
      */
     public function testQueryRoles(): void
     {
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $count = config('lighthouse.pagination.default_count');
 
@@ -82,7 +82,7 @@ class Permissions extends TestCase
      */
     public function testQueryRole(): void
     {
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $role = Role::latest()
             ->select(['id', 'name', 'guard_name'])
@@ -109,7 +109,7 @@ class Permissions extends TestCase
      */
     public function testQueryPermissions(): void
     {
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $count = config('lighthouse.pagination.default_count');
 
@@ -143,7 +143,7 @@ class Permissions extends TestCase
      */
     public function testQueryPermission(): void
     {
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $permission = Permission::latest()
             ->select(['id', 'name', 'guard_name'])
@@ -170,7 +170,7 @@ class Permissions extends TestCase
      */
     public function testMutationCreateRole()
     {
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $response = $this->graphQL(/** @lang GraphQL */ '
         mutation {
@@ -204,7 +204,7 @@ class Permissions extends TestCase
     public function testMutationDeleteRole(): void
     {
 
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $role = Role::create(['name' => 'tester']);
 
@@ -271,7 +271,7 @@ class Permissions extends TestCase
      */
     public function testMutationRevokePermissionToRole()
     {
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
         $role = Role::create(['name' => 'tester']);
         $permission = Permission::create(['name' => 'testing']);
         $role->givePermissionTo($permission);
@@ -350,7 +350,7 @@ class Permissions extends TestCase
      */
     public function testMutationCreatePermission()
     {
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $response = $this->graphQL(/** @lang GraphQL */ '
         mutation {
@@ -384,7 +384,7 @@ class Permissions extends TestCase
     public function testMutationDeletePermission(): void
     {
 
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $permission = permission::create(['name' => 'testing']);
 
@@ -450,7 +450,7 @@ class Permissions extends TestCase
      */
     public function testMutationAssignPermissionToRole()
     {
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
         $role = Role::create(['name' => 'tester']);
         $permission = Permission::create(['name' => 'testing']);
 

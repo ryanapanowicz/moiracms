@@ -19,8 +19,15 @@ class UpdateProject
 
             $project = Project::findOrFail($args["id"]);;
             $project->fill($args);
+            
+            // Attach featured image if it exists
+            if (array_key_exists('featured', $args)) {
+                $project->featured_id = $args['featured'];
+            }
+
             $project->save();
 
+            // Attach attachments if they exist
             if (isset($args["assets"]) and is_array($args["assets"])) {
                 // Add order_id using sorted index of assets
                 $assets = array_map(function($value, $index) {

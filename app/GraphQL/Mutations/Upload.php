@@ -2,9 +2,9 @@
 
 namespace App\GraphQL\Mutations;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Upload
 {
@@ -43,7 +43,8 @@ class Upload
                     ->usingName($name)
                     ->withCustomProperties($properties)
                     ->withResponsiveImagesIf($responsive)
-                    ->toMediaCollection();
+                    ->toMediaCollection()
+                    ->refresh();
             }
 
             return $media;

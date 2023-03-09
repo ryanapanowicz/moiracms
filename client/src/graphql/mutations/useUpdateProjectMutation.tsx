@@ -11,12 +11,18 @@ export type UpdateProjectType = {
 export type UpdateProjectInput = {
     id: string;
     title: string;
+    subtitle: string;
+    slug: string;
     content: string;
-    link: string;
-    built_with: [string];
-    keywords: [string];
-    description: string;
-    assets: [string];
+    featured?: string;
+    link?: string;
+    work_done?: string;
+    built_with?: [string];
+    keywords?: [string];
+    description?: string;
+    start?: string;
+    end?: string;
+    assets?: [string];
 };
 
 export const UpdateProjectMutation = gql`
@@ -26,6 +32,7 @@ export const UpdateProjectMutation = gql`
         $subtitle: String!
         $slug: String!
         $content: String!
+        $featured: ID
         $link: String
         $work_done: String
         $built_with: [String]
@@ -42,6 +49,7 @@ export const UpdateProjectMutation = gql`
                 subtitle: $subtitle
                 slug: $slug
                 content: $content
+                featured: $featured
                 link: $link
                 work_done: $work_done
                 built_with: $built_with
@@ -58,6 +66,25 @@ export const UpdateProjectMutation = gql`
                 subtitle
                 slug
                 content
+                featured {
+                    id
+                    name
+                    file_name
+                    url
+                    preview
+                    responsive_images {
+                        urls
+                        base64svg
+                    }
+                    type
+                    extension
+                    mime_type
+                    size
+                    alternative_text
+                    caption
+                    created_at
+                    updated_at
+                }
                 link
                 work_done
                 built_with

@@ -7,6 +7,7 @@ import CreateRoleForm from "./CreateRoleForm";
 import CreateUserForm from "./CreateUserForm";
 import DeleteButton from "./DeleteButton";
 import ForgotPasswordForm from "./ForgotPasswordForm";
+import ImageInput from "./ImageInput";
 import LoginForm from "./LoginForm";
 import PasswordInputs from "./PasswordInputs";
 import ProfileForm from "./ProfileForm";
@@ -19,6 +20,7 @@ import UpdateProjectForm from "./UpdateProjectForm";
 import UpdateUserForm from "./UpdateUserForm";
 
 export {
+    AssetInput,
     AssignPermissionForm,
     ContentEditor,
     CreatePermissionForm,
@@ -27,7 +29,7 @@ export {
     CreateUserForm,
     DeleteButton,
     ForgotPasswordForm,
-    AssetInput,
+    ImageInput,
     LoginForm,
     PasswordInputs,
     ProfileForm,

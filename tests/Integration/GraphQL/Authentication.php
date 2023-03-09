@@ -94,7 +94,7 @@ class Authentication extends TestCase
      */
     public function testQueryUser(): void
     {
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $user = User::factory()->create();
 
@@ -164,7 +164,7 @@ class Authentication extends TestCase
     {
         Event::fake([Registered::class]);
 
-        $admin = $this->createAuthAdmin();
+        $this->createAuthAdmin();
 
         $response = $this->graphQL(
         /** @lang GraphQL */

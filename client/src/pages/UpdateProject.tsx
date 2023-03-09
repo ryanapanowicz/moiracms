@@ -44,6 +44,7 @@ const UpdateProject: React.FC = () => {
                 variables: {
                     id: id,
                     ...values,
+                    featured: values.featured || null,
                     start: start ? start.format("YYYY-MM-DD") : null,
                     end: end ? end.format("YYYY-MM-DD") : null,
                 },
@@ -79,6 +80,7 @@ const UpdateProject: React.FC = () => {
                 description: formatError(projectError),
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectError]);
 
     // Render error page if no User was found

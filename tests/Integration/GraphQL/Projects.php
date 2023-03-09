@@ -4,11 +4,57 @@ namespace Tests\Integration\GraphQL;
 
 use Tests\TestCase;
 use App\Models\Project;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class Projects extends TestCase
 {
     use RefreshDatabase;
+
+    const PARAMETERS = [
+        'id',
+        'title',
+        'subtitle',
+        'slug',
+        'content',
+        'link',
+        'work_done',
+        'built_with',
+        'keywords',
+        'description',
+        'start',
+        'end',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * Helper to get GraphQL parameters for Project
+     *
+     */
+    protected function projectGraphQL(): string
+    {
+        $parameters = self::PARAMETERS;
+        $parameters[] = "featured {\n" . implode("\n", Assets::PARAMETERS) . "\n}";
+        $parameters[] = "assets {\n" . implode("\n", Assets::PARAMETERS) . "\n}";
+
+        return implode("\n", $parameters);
+    }
+
+    /**
+     * Static method for getting Project values for assert
+     * 
+     */
+    protected function projectParameters(Model $project): array
+    {
+        $data = $project->only(self::PARAMETERS);
+        $data['start'] = $project->start->format('Y-m-d');
+        $data['end'] = $project->end->format('Y-m-d');
+        $data['created_at'] = $project->created_at->format('Y-m-d H:i:s');
+        $data['updated_at'] = $project->updated_at->format('Y-m-d H:i:s');
+
+        return $data;
+    }
 
     /**
      * Test all Projects GraphQL query
@@ -17,63 +63,32 @@ class Projects extends TestCase
      */
     public function testQueryProjects(): void
     {
-        $project = Project::factory()->create();
+        $admin = $this->createAuthAdmin();
+        $photo = $this->generatePhoto($admin);
+
+        $project = Project::factory()->afterCreating(function ($model) use ($photo) {
+            $model->assets()->attach($photo->id);
+        })->create([
+                'featured_id' => $photo->id,
+            ]);
+
         $project_alt = Project::factory()->create();
 
-        $this->graphQL(
+        $response = $this->graphQL(
             /** @lang GraphQL */
             '
-        query {
-            projects {
-                data {
-                    id
-                    title
-                    subtitle
-                    slug
-                    content
-                    link
-                    work_done
-                    built_with
-                    keywords
-                    description
-                    start
-                    end
+            query {
+                projects {
+                    data { ' . $this->projectGraphQL() . ' }
                 }
             }
-        }
-        '
+            '
         )->assertJson([
                 'data' => [
                     'projects' => [
                         'data' => [
-                            [
-                                'id' => $project->id,
-                                'title' => $project->title,
-                                'subtitle' => $project->subtitle,
-                                'slug' => $project->slug,
-                                'content' => $project->content,
-                                'link' => $project->link,
-                                'work_done' => $project->work_done,
-                                'built_with' => $project->built_with,
-                                'keywords' => $project->keywords,
-                                'description' => $project->description,
-                                'start' => $project->start->format('Y-m-d'),
-                                'end' => $project->end->format('Y-m-d'),
-                            ],
-                            [
-                                'id' => $project_alt->id,
-                                'title' => $project_alt->title,
-                                'subtitle' => $project_alt->subtitle,
-                                'slug' => $project_alt->slug,
-                                'content' => $project_alt->content,
-                                'link' => $project_alt->link,
-                                'work_done' => $project_alt->work_done,
-                                'built_with' => $project_alt->built_with,
-                                'keywords' => $project_alt->keywords,
-                                'description' => $project_alt->description,
-                                'start' => $project_alt->start->format('Y-m-d'),
-                                'end' => $project_alt->end->format('Y-m-d'),
-                            ]
+                            $this->projectParameters($project),
+                            $this->projectParameters($project_alt),
                         ]
                     ]
                 ]
@@ -86,45 +101,25 @@ class Projects extends TestCase
      */
     public function testQueryProject(): void
     {
+        $admin = $this->createAuthAdmin();
+        $photo = $this->generatePhoto($admin);
 
-        $project = Project::factory()->create();
+        $project = Project::factory()->afterCreating(function ($model) use ($photo) {
+            $model->assets()->attach($photo->id);
+        })->create([
+                'featured_id' => $photo->id,
+            ]);
 
         $this->graphQL(
             /** @lang GraphQL */
             '
         query {
-            project(id: "' . $project->id . '") {
-                id
-                title
-                subtitle
-                slug
-                content
-                link
-                work_done
-                built_with
-                keywords
-                description
-                start
-                end
-            }
+            project(id: "' . $project->id . '") { ' . $this->projectGraphQL() . ' }
         }
         '
         )->assertJson([
                 'data' => [
-                    'project' => [
-                        'id' => $project->id,
-                        'title' => $project->title,
-                        'subtitle' => $project->subtitle,
-                        'slug' => $project->slug,
-                        'content' => $project->content,
-                        'link' => $project->link,
-                        'work_done' => $project->work_done,
-                        'built_with' => $project->built_with,
-                        'keywords' => $project->keywords,
-                        'description' => $project->description,
-                        'start' => $project->start->format('Y-m-d'),
-                        'end' => $project->end->format('Y-m-d'),
-                    ]
+                    'project' => $this->projectParameters($project),
                 ]
             ]);
     }
@@ -135,7 +130,8 @@ class Projects extends TestCase
      */
     public function testMutationCreateProject(): void
     {
-        $this->createAuthAdmin();
+        $admin = $this->createAuthAdmin();
+        $photo = $this->generatePhoto($admin);
 
         $response = $this->graphQL(
             /** @lang GraphQL */
@@ -145,6 +141,7 @@ class Projects extends TestCase
                 title: "Testing 123",
                 subtitle: "Testing",
                 content: "Testing Content.",
+                featured: "' . $photo->id . '",
                 link: "http://www.moiracms.com",
                 work_done: "Some work description",
                 built_with: ["Laravel", "React"],
@@ -152,21 +149,9 @@ class Projects extends TestCase
                 description: "Testing 123"
                 start: "2023-01-01",
                 end: "2023-12-01",
+                assets: ["' . $photo->id . '"],
             }) {
-                project {
-                    id
-                    title
-                    subtitle
-                    slug
-                    content
-                    link
-                    work_done
-                    built_with
-                    keywords
-                    description
-                    start
-                    end
-                }
+                project { ' . $this->projectGraphQL() . ' }
             }
         }
         '
@@ -183,6 +168,7 @@ class Projects extends TestCase
                         'subtitle' => 'Testing',
                         'slug' => 'testing-123',
                         'content' => 'Testing Content.',
+                        'featured' => $photo->only(Assets::PARAMETERS),
                         'link' => 'http://www.moiracms.com',
                         'work_done' => 'Some work description',
                         'built_with' => ['Laravel', 'React'],
@@ -190,6 +176,9 @@ class Projects extends TestCase
                         'description' => 'Testing 123',
                         'start' => '2023-01-01',
                         'end' => '2023-12-01',
+                        'assets' => [
+                            $photo->only(Assets::PARAMETERS)
+                        ],
                     ]
                 ]
             ]
@@ -202,8 +191,8 @@ class Projects extends TestCase
      */
     public function testMutationUpdateProject(): void
     {
-
-        $this->createAuthAdmin();
+        $admin = $this->createAuthAdmin();
+        $photo = $this->generatePhoto($admin);
 
         $project = Project::factory()->create();
 
@@ -216,6 +205,7 @@ class Projects extends TestCase
                 subtitle: "Testing",
                 slug: "testing-123",
                 content: "Testing Content.",
+                featured: "' . $photo->id . '",
                 link: "http://www.moiracms.com",
                 work_done: "Some work description",
                 built_with: ["Laravel", "React"],
@@ -223,21 +213,9 @@ class Projects extends TestCase
                 description: "Testing 123"
                 start: "2023-01-01",
                 end: "2023-12-01",
+                assets: ["' . $photo->id . '"],
             }) {
-                project {
-                    id
-                    title
-                    subtitle
-                    slug
-                    content
-                    link
-                    work_done
-                    built_with
-                    keywords
-                    description
-                    start
-                    end
-                }
+                project { ' . $this->projectGraphQL() . ' }
             }
         }
         '
@@ -252,6 +230,7 @@ class Projects extends TestCase
                         'subtitle' => 'Testing',
                         'slug' => 'testing-123',
                         'content' => 'Testing Content.',
+                        'featured' => $photo->only(Assets::PARAMETERS),
                         'link' => 'http://www.moiracms.com',
                         'work_done' => 'Some work description',
                         'built_with' => ['Laravel', 'React'],
@@ -259,6 +238,9 @@ class Projects extends TestCase
                         'description' => 'Testing 123',
                         'start' => '2023-01-01',
                         'end' => '2023-12-01',
+                        'assets' => [
+                            $photo->only(Assets::PARAMETERS)
+                        ],
                     ]
                 ]
             ]
@@ -271,30 +253,22 @@ class Projects extends TestCase
      */
     public function testMutationDeleteProject(): void
     {
+        $admin = $this->createAuthAdmin();
+        $photo = $this->generatePhoto($admin);
 
-        $this->createAuthAdmin();
+        $project = Project::factory()->afterCreating(function ($model) use ($photo) {
+            $model->assets()->attach($photo->id);
+        })->create([
+                'featured_id' => $photo->id,
+            ]);
 
-        $project = Project::factory()->create();
 
         $response = $this->graphQL(
             /** @lang GraphQL */
             '
         mutation {
             deleteProject(id: "' . $project->id . '") {
-                project {
-                    id
-                    title
-                    subtitle
-                    slug
-                    content
-                    link
-                    work_done
-                    built_with
-                    keywords
-                    description
-                    start
-                    end
-                }
+                project { ' . $this->projectGraphQL() . ' }
             }
         }
         '
@@ -305,20 +279,7 @@ class Projects extends TestCase
         $response->assertJson([
             'data' => [
                 'deleteProject' => [
-                    'project' => [
-                        'id' => $project->id,
-                        'title' => $project->title,
-                        'subtitle' => $project->subtitle,
-                        'slug' => $project->slug,
-                        'content' => $project->content,
-                        'link' => $project->link,
-                        'work_done' => $project->work_done,
-                        'built_with' => $project->built_with,
-                        'keywords' => $project->keywords,
-                        'description' => $project->description,
-                        'start' => $project->start->format('Y-m-d'),
-                        'end' => $project->end->format('Y-m-d'),
-                    ]
+                    'project' => $this->projectParameters($project),
                 ]
             ]
         ]);

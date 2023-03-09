@@ -26,6 +26,7 @@ const CreateProject: React.FC = () => {
             createProject({
                 variables: {
                     ...values,
+                    featured: values.featured || null,
                     start: start ? start.format("YYYY-MM-DD") : null,
                     end: end ? end.format("YYYY-MM-DD") : null,
                 },

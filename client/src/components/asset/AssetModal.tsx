@@ -7,7 +7,7 @@ export type AssetModalType = "view" | "upload" | "edit";
 
 export interface GalleryArg {
     enabled: boolean;
-    maxSelection: number | undefined;
+    maxSelection: number | string | undefined;
 }
 
 export interface AssetModalProps {
@@ -82,6 +82,8 @@ const AssetModal: React.FC<AssetModalProps> = ({
                                         message: "Success",
                                         description: `Uploaded files successfully!`,
                                     });
+
+                                    setSubmitting(false);
 
                                     gallery
                                         ? showModal({ type: "view" })

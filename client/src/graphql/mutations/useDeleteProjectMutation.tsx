@@ -20,6 +20,25 @@ export const DeleteProjectMutation = gql`
                 title
                 slug
                 content
+                featured {
+                    id
+                    name
+                    file_name
+                    url
+                    preview
+                    responsive_images {
+                        urls
+                        base64svg
+                    }
+                    type
+                    extension
+                    mime_type
+                    size
+                    alternative_text
+                    caption
+                    created_at
+                    updated_at
+                }
                 link
                 built_with
                 keywords

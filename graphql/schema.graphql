@@ -31,6 +31,7 @@ type Project {
     subtitle: String!
     slug: String!
     content: String
+    featured: Media
     link: String
     work_done: String
     built_with: [String]
@@ -48,6 +49,7 @@ input CreateProjectInput {
     title: String! @rules(apply: ["string"])
     subtitle: String! @rules(apply: ["string"])
     content: String!
+    featured: ID
     link: String @rules(apply: ["url"])
     work_done: String @rules(apply: ["string", "nullable"])
     built_with: [String]
@@ -63,6 +65,7 @@ input UpdateProjectInput @validator {
     subtitle: String!
     slug: String!
     content: String!
+    featured: ID
     link: String
     work_done: String
     built_with: [String]

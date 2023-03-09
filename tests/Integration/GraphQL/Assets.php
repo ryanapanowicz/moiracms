@@ -2,32 +2,53 @@
 
 namespace Tests\Integration\GraphQL;
 
-use App\Models\Media as Asset;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Testing\File;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
+use App\Models\Media as Asset;
+use Illuminate\Http\Testing\File;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class Assets extends TestCase
 {
     use RefreshDatabase;
 
+    const PARAMETERS = [
+        'id',
+        'name',
+        'file_name',
+        'url',
+        'preview',
+        'type',
+        'extension',
+        'mime_type',
+        'size',
+        'alternative_text',
+        'caption',
+        'created_at',
+        'updated_at',
+    ];
+
     /**
-     * Setup helpers for test cases
+     * Helper to get GraphQL parameters for Asset
+     *
+     */
+    protected function assetGraphQL(): string
+    {
+        return implode("\n", self::PARAMETERS);
+    }
+
+    /**
+     * Static method for getting Asset values for assert
      * 
      */
-    public function setUp(): void
+    protected function assetParameters(Model $media): array
     {
-        parent::setUp();
+        $data = $media->only(self::PARAMETERS);
+        $data['created_at'] = $media->created_at->format('Y-m-d H:i:s');
+        $data['updated_at'] = $media->updated_at->format('Y-m-d H:i:s');
 
-        Storage::fake('media');
-        config()->set('filesystems.disks.media', [
-            'driver' => 'local',
-            'root'   => storage_path('app/media'),
-        ]);
-
-        config()->set('media-library.disk_name', 'media');
+        return $data;
     }
 
     /**
@@ -44,43 +65,17 @@ class Assets extends TestCase
             '
         query {
             assets {
-                data {
-                    id
-                    name
-                    file_name
-                    url
-                    preview
-                    type
-                    extension
-                    mime_type
-                    size
-                    alternative_text
-                    caption
-                }
+                data {' . $this->assetGraphQL() . '}
             }
         }
         '
         )->assertJson([
-            'data' => [
-                'assets' => [
-                    'data' => [
-                        $photo->only([
-                            'id',
-                            'name',
-                            'file_name',
-                            'url',
-                            'preview',
-                            'type',
-                            'extension',
-                            'mime_type',
-                            'size',
-                            'alternative_text',
-                            'caption',
-                        ])
+                'data' => [
+                    'assets' => [
+                        'data' => [$this->assetParameters($photo)]
                     ]
                 ]
-            ]
-        ]);
+            ]);
     }
 
     /**
@@ -96,39 +91,14 @@ class Assets extends TestCase
             /** @lang GraphQL */
             '
         query {
-            asset(id: "' . $photo->id . '") {
-                id
-                name
-                file_name
-                url
-                preview
-                type
-                extension
-                mime_type
-                size
-                alternative_text
-                caption
-            }
+            asset(id: "' . $photo->id . '") {' . $this->assetGraphQL() . '}
         }
         '
         )->assertJson([
-            'data' => [
-                'asset' => $photo->only([
-                    'id',
-                    'name',
-                    'file_name',
-                    'url',
-                    'preview',
-                    'type',
-                    'extension',
-                    'mime_type',
-                    'size',
-                    'alternative_text',
-                    'caption',
-                ])
-
-            ]
-        ]);
+                'data' => [
+                    'asset' => $this->assetParameters($photo)
+                ]
+            ]);
     }
 
     /**
@@ -148,42 +118,18 @@ class Assets extends TestCase
             '
         mutation {
             deleteAsset(id: "' . $photo->id . '") {
-                asset {
-                    id
-                    name
-                    file_name
-                    url
-                    preview
-                    type
-                    extension
-                    mime_type
-                    size
-                    alternative_text
-                    caption
-                }
+                asset {' . $this->assetGraphQL() . '}
             }
         }
         '
         )->assertJson([
-            'data' => [
-                'deleteAsset' => [
-                    'asset' => $photo->only([
-                        'id',
-                        'name',
-                        'file_name',
-                        'url',
-                        'preview',
-                        'type',
-                        'extension',
-                        'mime_type',
-                        'size',
-                        'alternative_text',
-                        'caption',
-                    ])
-                ]
+                'data' => [
+                    'deleteAsset' => [
+                        'asset' => $this->assetParameters($photo)
+                    ]
 
-            ]
-        ]);
+                ]
+            ]);
 
         $this->assertDatabaseMissing($photo->getTable(), ['id' => $photo->id]);
         Storage::disk('media')->assertMissing($photo->id . '/photo.jpg');
@@ -213,7 +159,6 @@ class Assets extends TestCase
                 upload (
                     input: {
                         ref_id: "' . $admin->id . '",
-                        ref: "default",
                         info: {
                             name: "Tester",
                             alternative_text: "testing image",
@@ -222,26 +167,14 @@ class Assets extends TestCase
                         responsive: true
                         files: $files,
                     }
-                ) {
-                    id
-                    name
-                    file_name
-                    url
-                    preview
-                    type
-                    extension
-                    mime_type
-                    size
-                    alternative_text
-                    caption
-                }
+                ) {' . $this->assetGraphQL() . '}
             }',
             'variables' => [
                 'files' => null,
             ]
         ], $map, $files);
-
-        $files = $admin->getMedia();
+        
+        $files = $admin->refresh()->getMedia();
 
         $this->assertDatabaseHas($files->first()->getTable(), ['id' => $files->first()->id]);
         $this->assertDatabaseHas($files->first()->getTable(), ['id' => $files->last()->id]);
@@ -249,19 +182,7 @@ class Assets extends TestCase
         $this->assertTrue(Storage::disk('media')->exists($files->last()->id . '/photoPNG.png'));
 
         $files = $files->map(function ($file) {
-            return $file->only([
-                'id',
-                'name',
-                'file_name',
-                'url',
-                'preview',
-                'type',
-                'extension',
-                'mime_type',
-                'size',
-                'alternative_text',
-                'caption',
-            ]);
+            return $this->assetParameters($file);
         });
 
         $response->assertJson([
@@ -292,19 +213,7 @@ class Assets extends TestCase
                     caption: "New Image"
                 }
             ) {
-                asset {
-                    id
-                    name
-                    file_name
-                    url
-                    preview
-                    type
-                    extension
-                    mime_type
-                    size
-                    alternative_text
-                    caption
-                }
+                asset {' . $this->assetGraphQL() . '}
             }
         }
         '
@@ -319,31 +228,10 @@ class Assets extends TestCase
         $response->assertJson([
             'data' => [
                 'updateAssetInfo' => [
-                    'asset' => $updatedPhoto->only([
-                        'id',
-                        'name',
-                        'file_name',
-                        'url',
-                        'preview',
-                        'type',
-                        'extension',
-                        'mime_type',
-                        'size',
-                        'alternative_text',
-                        'caption',
-                    ])
+                    'asset' => $this->assetParameters($updatedPhoto)
                 ]
 
             ]
         ]);
-    }
-
-    /**
-     * Create a mock photos in the DB
-     * 
-     */
-    protected function generatePhoto(Model $model): Model
-    {
-        return $model->addMedia(File::image('photo.jpg'))->toMediaCollection('default', 'media');
     }
 }

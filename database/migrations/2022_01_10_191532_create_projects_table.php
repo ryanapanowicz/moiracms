@@ -20,6 +20,7 @@ class CreateProjectsTable extends Migration
             $table->string('subtitle');
             $table->string('slug')->unique();
             $table->longText('content');
+            $table->uuid('featured_id')->nullable();
             $table->date('start')->nullable();
             $table->date('end')->nullable();
             $table->string('link')->nullable();
@@ -29,6 +30,7 @@ class CreateProjectsTable extends Migration
             $table->string('description')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('featured_id')->references('id')->on('media')->nullOnDelete();
         });
     }
 

@@ -36,6 +36,7 @@ class Project extends Model
         'subtitle',
         'slug',
         'content',
+        'featured_id',
         'keywords',
         'description',
         'link',
@@ -71,5 +72,13 @@ class Project extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get featured image media object for Modal.
+     */
+    public function featured()
+    {
+        return $this->hasOne(Media::class, 'id', 'featured_id');
     }
 }

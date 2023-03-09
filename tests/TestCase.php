@@ -3,10 +3,13 @@
 namespace Tests;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Passport;
+use Illuminate\Http\Testing\File;
+use Laravel\Passport\ClientRepository;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -16,6 +19,14 @@ abstract class TestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        Storage::fake('media');
+        config()->set('filesystems.disks.media', [
+            'driver' => 'local',
+            'root' => storage_path('app/media'),
+        ]);
+
+        config()->set('media-library.disk_name', 'media');
 
         // disable debug errors and stacktrace
         config()->set('lighthouse.debug', 0);
@@ -46,5 +57,20 @@ abstract class TestCase extends BaseTestCase
         $authUser->assignRole('admin');
 
         return $authUser;
+    }
+
+    /**
+     * Create a mock photos in the DB
+     * 
+     */
+    protected function generatePhoto(Model $model): Model
+    {
+        return $model
+            ->addMedia(File::image('photo.jpg'))
+            ->usingName("Test Photo")
+            ->withCustomProperties(["alternative_text" => "test", "caption" => "test"])
+            ->withResponsiveImagesIf(true)
+            ->toMediaCollection()
+            ->refresh();
     }
 }

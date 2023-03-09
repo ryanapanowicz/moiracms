@@ -2,7 +2,7 @@ import { Col, DatePicker, Form, FormInstance, Input, Row, Select } from "antd";
 import { Store } from "antd/lib/form/interface";
 import dayjs from "dayjs";
 import React, { useMemo } from "react";
-import { AssetInput, ContentEditor } from ".";
+import { AssetInput, ContentEditor, ImageInput } from ".";
 export interface UpdateProjectFormProps {
     form?: FormInstance<any>;
     onFinish?: (values: any) => void;
@@ -14,9 +14,12 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
     onFinish,
     initialValues,
 }) => {
+    // Format form initial values
     const [start, end] = useMemo(() => {
-        const startDate = initialValues?.start && dayjs(initialValues.start, "YYYY-MM-DD");
-        const endDate = initialValues?.end && dayjs(initialValues.end, "YYYY-MM-DD");
+        const startDate =
+            initialValues?.start && dayjs(initialValues.start, "YYYY-MM-DD");
+        const endDate =
+            initialValues?.end && dayjs(initialValues.end, "YYYY-MM-DD");
         return [startDate, endDate];
     }, [initialValues]);
 
@@ -28,7 +31,10 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
             onFinish={onFinish}
             layout="vertical"
             requiredMark="optional"
-            initialValues={{ ...initialValues, project_time: [start, end] }}
+            initialValues={{
+                ...initialValues,
+                project_time: [start, end],
+            }}
         >
             <Row>
                 <Col>
@@ -119,14 +125,21 @@ const UpdateProjectForm: React.FC<UpdateProjectFormProps> = ({
             </Row>
             <Row gutter={24}>
                 <Col span={24}>
-                    <Form.Item name="assets">
+                    <Form.Item name="featured" label="Featured Image">
+                        <ImageInput />
+                    </Form.Item>
+                </Col>
+            </Row>
+            <Row gutter={24}>
+                <Col span={24}>
+                    <Form.Item name="assets" label="Assets">
                         <AssetInput />
                     </Form.Item>
                 </Col>
             </Row>
             <Row gutter={24}>
                 <Col span={24}>
-                    <Form.Item name="project_time" label="Project Timeline">
+                    <Form.Item name="project_time" label="Timeline">
                         <DatePicker.RangePicker />
                     </Form.Item>
                 </Col>

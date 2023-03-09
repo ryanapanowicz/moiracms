@@ -27,7 +27,7 @@ import SortableItem, { SortableHandle } from "../list/SortableItem";
 export interface AssetInputProps {
     value?: Media[];
     onChange?: (changeValue: any) => void;
-    maxSelection?: number;
+    maxSelection?: number | string;
 }
 
 interface AssetType extends Media {

@@ -1,6 +1,6 @@
 import { Col, DatePicker, Form, FormInstance, Input, Row, Select } from "antd";
 import React from "react";
-import { AssetInput, ContentEditor } from ".";
+import { AssetInput, ContentEditor, ImageInput } from ".";
 
 export interface CreateProjectFormProps {
     form?: FormInstance<any>;
@@ -79,7 +79,14 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
             </Row>
             <Row gutter={24}>
                 <Col span={24}>
-                    <Form.Item name="assets">
+                    <Form.Item name="featured" label="Featured Image">
+                        <ImageInput />
+                    </Form.Item>
+                </Col>
+            </Row>
+            <Row gutter={24}>
+                <Col span={24}>
+                    <Form.Item name="assets" label="Assets">
                         <AssetInput />
                     </Form.Item>
                 </Col>

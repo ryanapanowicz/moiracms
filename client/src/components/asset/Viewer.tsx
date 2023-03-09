@@ -10,7 +10,7 @@ import { AbilityContext } from "../../services/Can";
 import { sortOrderData } from "../form/SortOrderMenu";
 
 export interface ViewerProps {
-    maxSelection?: number;
+    maxSelection?: number | string;
     onSubmit?: (assets: any[]) => void;
 }
 
@@ -110,7 +110,7 @@ const Viewer: React.FC<ViewerProps> = ({ maxSelection, onSubmit }) => {
             setSelected(selected.filter((item) => item.id !== file.id));
         } else {
             // Skip if over max selection of assets
-            if (maxSelection && selected.length >= maxSelection) {
+            if (maxSelection && selected.length >= Number(maxSelection)) {
                 return;
             }
 

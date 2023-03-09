@@ -42,6 +42,7 @@ export type Project = {
     subtitle: string;
     slug: string;
     content: string;
+    featured: Media;
     link: string;
     work_done: string;
     built_with: [string];
