@@ -118,6 +118,7 @@ const Editor: React.FC<EditorProps> = ({
                     description: formatError(error),
                 })
         );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [queryError, updateError, deleteError]);
 
     useEffect(() => {

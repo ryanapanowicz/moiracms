@@ -1,3 +1,5 @@
 import { Ability } from "@casl/ability";
 
-export default new Ability();
+const ability = new Ability();
+
+export default ability;

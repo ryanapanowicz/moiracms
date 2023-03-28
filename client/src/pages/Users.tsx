@@ -55,6 +55,7 @@ const Users: React.FC = () => {
                 description: formatError(error),
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [error]);
 
     return (

@@ -99,6 +99,7 @@ const UpdateUser: React.FC = () => {
                 description: formatError(userError),
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userError]);
 
     // Render error page if no User was found
