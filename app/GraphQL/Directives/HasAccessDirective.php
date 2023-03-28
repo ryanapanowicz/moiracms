@@ -2,9 +2,8 @@
 
 namespace App\GraphQL\Directives;
 
-use Closure;
-use GraphQL\Type\Definition\ResolveInfo;
 use App\Exceptions\AuthorizationException;
+use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
@@ -59,35 +58,36 @@ GRAPHQL;
 
     public function handleField(
         FieldValue $fieldValue,
-        Closure $next
-    ): FieldValue
-    {
-        $previousResolver = $fieldValue->getResolver();
-
-        $fieldValue->setResolver(function ($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo) use ($previousResolver) {
+    ): void {
+        $fieldValue->wrapResolver(fn(callable $resolver): \Closure => function (mixed $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo) use ($resolver) {
             $this->user = $context->user();
 
             // Handle Roles and Permissions checks for input types
-            $this->doArgAccessChecks($resolveInfo);
+            $this->doArgAccessChecks(
+                $root,
+                $args,
+                $context,
+                $resolveInfo
+            );
 
             // Handle Roles and Permissions checks for field definition
-            $this->doAccessChecks($this, $resolveInfo);
+            $this->doAccessChecks(
+                $this,
+                $root,
+                $args,
+                $context,
+                $resolveInfo
+            );
 
-            return $previousResolver($root, $args, $context, $resolveInfo);
+            return $resolver($root, $args, $context, $resolveInfo);
         });
 
-        return $next($fieldValue);
     }
 
-    protected function doAccessChecks(
-        BaseDirective $directive,
-        ResolveInfo $resolveInfo
-    ): void
+    protected function doAccessChecks(BaseDirective $directive, mixed $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): void
     {
         $roles = $directive->directiveArgValue("role");
         $permissions = $directive->directiveArgValue("permission");
-        $ownerAccess = $directive->directiveArgValue("owner", false);
-        $fieldName = $directive->directiveArgValue("field", "user_id");
 
         if (!$this->user) {
             throw new AuthorizationException("Unauthenticated.", "You need to be logged in to access.");
@@ -95,7 +95,14 @@ GRAPHQL;
 
         // Skip other validation checks if the user owns
         // the model and ownership override is enabled.
-        if ($this->hasOwnership($ownerAccess, $fieldName, $resolveInfo)) {
+        if (
+            $this->hasOwnership(
+                $root,
+                $args,
+                $context,
+                $resolveInfo
+            )
+        ) {
             return;
         }
 
@@ -110,36 +117,48 @@ GRAPHQL;
         }
     }
 
-    protected function doArgAccessChecks(ResolveInfo $resolveInfo): void
+    protected function doArgAccessChecks(mixed $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): void
     {
-        foreach ($resolveInfo->argumentSet->arguments as $key => $argument) {
+        foreach ($resolveInfo->argumentSet->arguments as $argument) {
             $filteredDirectives = $argument->directives->filter(function ($object): bool {
                 return $object instanceof ArgAccessDirective;
             });
 
             if ($filteredDirectives->count() > 0) {
                 foreach ($filteredDirectives as $directive) {
-                    $this->doAccessChecks($directive, $resolveInfo);
+                    $this->doAccessChecks(
+                        $directive,
+                        $root,
+                        $args,
+                        $context,
+                        $resolveInfo
+                    );
                 }
             }
         }
     }
 
-    protected function hasOwnership(
-        bool $isOwner,
-        string $fieldName,
-        ResolveInfo $resolveInfo
-    ): bool
+    protected function hasOwnership(mixed $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
-        if (!$isOwner) {
+        $ownerAccess = $this->directiveArgValue("owner", false);
+        $fieldName = $this->directiveArgValue("field", "user_id");
+
+        if (!$ownerAccess) {
             return false;
         }
 
         $relation = $this->directiveArgValue('relation');
         $valid = false;
 
-        $models = $resolveInfo->argumentSet
-            ->enhanceBuilder($this->getModelClass()::query(), [])
+        $models = $resolveInfo
+            ->enhanceBuilder(
+                $this->getModelClass()::query(),
+                [],
+                $root,
+                $args,
+                $context,
+                $resolveInfo,
+            )
             ->get();
 
         foreach ($models as $model) {

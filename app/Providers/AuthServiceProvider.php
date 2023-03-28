@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use App\Observers\AuthClientObserver;
-use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Client;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\Gate;
+use App\Observers\AuthClientObserver;
 use Nuwave\Lighthouse\Events\BuildSchemaString;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -37,14 +37,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-
         // Implicitly grant "Super Admin" role all permissions
         Gate::before(function ($user, $ability) {
             return $user->hasRole("super admin") ? true : null;
         });
-
-        Passport::routes();
 
         // Handle AuthClient Uuid
         Client::observe(AuthClientObserver::class);

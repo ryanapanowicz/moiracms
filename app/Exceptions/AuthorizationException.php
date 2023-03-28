@@ -2,10 +2,10 @@
 
 namespace App\Exceptions;
 
-use Exception;
-use Nuwave\Lighthouse\Exceptions\RendersErrorsExtensions;
+use GraphQL\Error\ClientAware;
+use Illuminate\Auth\Access\AuthorizationException as IlluminateAuthorizationException;
 
-class AuthorizationException extends Exception implements RendersErrorsExtensions
+class AuthorizationException extends IlluminateAuthorizationException implements ClientAware
 {
     /**
      * @var @string

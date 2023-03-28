@@ -12,6 +12,9 @@ import { Auth, Cache, refreshToken } from ".";
 
 const httpLink = createUploadLink({
     uri: process.env.GRAPHQL_URI || "http://localhost:8000/graphql",
+    headers: {
+        "X-Requested-With": "XMLHttpRequest",
+    },
 });
 
 const authLink = setContext((_, { Headers }) => {

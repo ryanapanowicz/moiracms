@@ -153,6 +153,7 @@ class Assets extends TestCase
             '1' => File::image('photoPNG.png')
         ];
 
+        // Make sure to use XMLHttpRequest header
         $response = $this->multipartGraphQL([
             'operationName' => 'upload',
             'query' => 'mutation upload ($files: [Upload]!) {
@@ -172,8 +173,8 @@ class Assets extends TestCase
             'variables' => [
                 'files' => null,
             ]
-        ], $map, $files);
-        
+        ], $map, $files, ["X-Requested-With" => "XMLHttpRequest"]);
+
         $files = $admin->refresh()->getMedia();
 
         $this->assertDatabaseHas($files->first()->getTable(), ['id' => $files->first()->id]);
