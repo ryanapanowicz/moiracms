@@ -25,7 +25,7 @@ Moira CMS is a simple headless CMS powered by Laravel, GraphQL, React, and Ant D
 - Run ```php artisan moiracms:install``` and follow prompts.
 - Run ```php artisan serve```
 
-You can interact with the GraphQL API in a development environment by visiting http://localhost:8000/graphql-playground
+You can interact with the GraphQL API in a development environment by visiting http://localhost:8000/graphiql
 
 #### Admin Frontend Install
 - Run ```cd client```

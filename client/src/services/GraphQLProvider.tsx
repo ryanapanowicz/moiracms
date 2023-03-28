@@ -11,7 +11,7 @@ import React from "react";
 import { Auth, Cache, refreshToken } from ".";
 
 const httpLink = createUploadLink({
-    uri: process.env.GRAPHQL_URI || "http://localhost:8000/graphql",
+    uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:8000/graphql",
     headers: {
         "X-Requested-With": "XMLHttpRequest",
     },
