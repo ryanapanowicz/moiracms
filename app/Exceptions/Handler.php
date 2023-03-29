@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -34,6 +36,12 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        $this->renderable(function (BadRequestHttpException $e, Request $request) {
+            if ($request->getRealMethod() === 'GET') {
+                return $this->renderHttpException($e);
+            }
+        });
+
         $this->reportable(function (Throwable $e) {
             //
         });
