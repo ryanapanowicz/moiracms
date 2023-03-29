@@ -1,7 +1,7 @@
 <p align="center"><img src="https://raw.githubusercontent.com/ryanapanowicz/moiracms/main/client/src/assets/svg/moira-logo.svg" width="150"></p>
 
 <p align="center">
-    <a href="https://laravel.com/"><img src="https://img.shields.io/badge/laravel-9.19-blue" alt="laravel 9.19"></a>
+    <a href="https://laravel.com/"><img src="https://img.shields.io/badge/laravel-10.5.0-blue" alt="laravel 10.5.0"></a>
     <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/react-18.2.0-blue" alt="react 18.2.0"></a>
     <a href="https://ant.design/"><img src="https://img.shields.io/badge/antd-5.2.0-blue" alt="antd 5.2.0"></a>
 </p>
@@ -21,6 +21,8 @@ Moira CMS is a simple headless CMS powered by Laravel, GraphQL, React, and Ant D
 #### Laravel Backend Install
 - Run ```cp .env.example .env```
 - Run ```composer install```
+- Run ```npm install```
+- Run ```npm dev``` or ```npm run build```
 - Add database name, username and password in .env
 - Run ```php artisan moiracms:install``` and follow prompts.
 - Run ```php artisan serve```
