@@ -61,7 +61,8 @@ class User extends Authenticatable implements HasMedia
     {
         $this->addMediaConversion('preview')
             ->fit(Manipulations::FIT_CROP, 640, 480)
-            ->sharpen(10);
+            ->sharpen(10)
+            ->nonQueued();
     }
 
     public function shouldDeletePreservingMedia(): bool
